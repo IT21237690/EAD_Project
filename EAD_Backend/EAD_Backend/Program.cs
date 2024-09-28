@@ -1,89 +1,63 @@
-using EAD_Backend.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using UserAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Services from Identity Core.
-builder.Services
-    .AddIdentityApiEndpoints<AppUser>()
-    .AddEntityFrameworkStores<AppDbContext>();
-
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    options.Password.RequireDigit = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.User.RequireUniqueEmail = true;
-});
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DevDB")));
-
+builder.Services.Configure<UserDatabaseSettings>(builder.Configuration.GetSection("EADDatabaseSettings"));
+builder.Services.AddSingleton<UserService>();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+/// <summary>
+/// 
+/// </summary>
+app.MapGet("/", () => "Users API!");
+
+/// <summary>
+/// Get all movies
+/// </summary>
+app.MapGet("/api/users", async (UserService userService) => await userService.Get());
+
+/// <summary>
+/// Get a movie by id
+/// </summary>
+app.MapGet("/api/users/{id}", async (UserService userService, string id) =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    var user = await userService.Get(id);
+    return user is null ? Results.NotFound() : Results.Ok(user);
+});
 
-#region Config. CORS
-app.UseCors(options =>
-    options.WithOrigins("http://localhost:4200")
-            .AllowAnyMethod()
-            .AllowAnyHeader());
-#endregion
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app
-    .MapGroup("/api")
-    .MapIdentityApi<AppUser>();
-
-
-
-app.MapPost("/api/signup", async (
-    UserManager<AppUser> userManager,
-    [FromBody] UserRegistrationModel userRegistrationModel
-    ) =>
+/// <summary>
+/// Create a new movie
+/// </summary>
+app.MapPost("/api/users/add", async (UserService userService, User user) =>
 {
-    AppUser user = new AppUser()
-    {
-        UserName = userRegistrationModel.Email,
-        Email = userRegistrationModel.Email,
-        FirstName = userRegistrationModel.FirstName,
-        LastName = userRegistrationModel.LastName,
-    };
-    var result = await userManager.CreateAsync(
-        user,
-        userRegistrationModel.Password);
+    await userService.Create(user);
+    return Results.Ok();
+});
 
-    if (result.Succeeded)
-        return Results.Ok(result);
-    else
-        return Results.BadRequest(result);
+/// <summary>
+/// Update a movie
+/// </summary>
+app.MapPut("/api/users/{id}", async (UserService userService, string id, User updatedUser) =>
+{
+    var user = await userService.Get(id);
+    if (user is null) return Results.NotFound();
+
+    updatedUser.Id = user.Id;
+    await userService.Update(id, updatedUser);
+
+    return Results.NoContent();
+});
+
+/// <summary>
+/// Delete a movie
+/// </summary>
+app.MapDelete("/api/users/{id}", async (UserService userService, string id) =>
+{
+    var user = await userService.Get(id);
+    if (user is null) return Results.NotFound();
+
+    await userService.Remove(user.Id);
+
+    return Results.NoContent();
 });
 
 app.Run();
-
-public class UserRegistrationModel
-{
-    public string Email { get; set; }
-    public string Password { get; set; }
-    public string FirstName { get; set; }
-
-    public string LastName { get; set; }
-}
