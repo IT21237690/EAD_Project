@@ -4,23 +4,24 @@ using BCrypt.Net;
 using EAD_Backend.Models;
 using EAD_Backend.Models.DatabaseSettings;
 using EAD_Backend.Services.Interfaces;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace EAD_Backend.Services;
 
 public class UsersService : IUserService
 {
     private readonly IMongoCollection<User> _usersCollection;
+    private readonly IConfiguration _configuration;
 
-    public UsersService(IOptions<UsersDatabaseSettings> usersDbSettings)
+    public UsersService(IOptions<UsersDatabaseSettings> usersDbSettings, IConfiguration configuration)
     {
-        var mongoClient = new MongoClient(
-            usersDbSettings.Value.ConnectionString);
-
-        var mongoDatabase = mongoClient.GetDatabase(
-            usersDbSettings.Value.DbName);
-
-        _usersCollection = mongoDatabase.GetCollection<User>(
-            usersDbSettings.Value.UsersCollectionName);
+        var mongoClient = new MongoClient(usersDbSettings.Value.ConnectionString);
+        var mongoDatabase = mongoClient.GetDatabase(usersDbSettings.Value.DbName);
+        _usersCollection = mongoDatabase.GetCollection<User>(usersDbSettings.Value.UsersCollectionName);
+        _configuration = configuration;
     }
 
     // Get all users
@@ -60,8 +61,32 @@ public class UsersService : IUserService
         }
     }
 
-    public async Task Login(string username, string password)
+
+    public async Task<string> Login(string email, string password)
     {
-        throw new NotImplementedException();
+        // 1. Check if the user exists
+        var user = await _usersCollection.Find(x => x.Email == email).FirstOrDefaultAsync();
+        if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
+        {
+            throw new UnauthorizedAccessException("Invalid email or password.");
+        }
+
+        // 2. Create JWT Token
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Secret"]); // Secret key from appsettings.json
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new[]
+            {
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, user.Role) // Assuming Role is a string in your User class
+                }),
+            Expires = DateTime.UtcNow.AddHours(1), // Token expiration
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token); // Return the generated token
     }
 }

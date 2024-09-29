@@ -17,6 +17,28 @@ namespace EAD_Backend.Controllers
             _userService = userService;
         }
 
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+        {
+            try
+            {
+                // Call the Login method in UsersService which returns the JWT token
+                var token = await _userService.Login(loginRequest.Email, loginRequest.Password);
+
+                if (token == null)
+                {
+                    return Unauthorized("Invalid credentials");
+                }
+
+                return Ok(new { Token = token });
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized("Invalid credentials");
+            }
+        }
+
         // Get all users
         [HttpGet("all")]
         public async Task<List<User>> Get() =>

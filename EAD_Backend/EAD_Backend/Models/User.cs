@@ -21,6 +21,8 @@ namespace EAD_Backend.Models
 
         public string Name { get; set; }
 
+        public string Role { get; set; }
+
         [BsonIgnoreIfNull]
         public string Address { get; set; }
 
