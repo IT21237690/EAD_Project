@@ -1,63 +1,77 @@
-using UserAPI.Data;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Identity;
+using EAD_Backend.Controllers;
+using EAD_Backend.Models;
+using EAD_Backend.Models.DatabaseSettings;
+using EAD_Backend.Services;
+using EAD_Backend.Services.Interfaces;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.Configure<UserDatabaseSettings>(builder.Configuration.GetSection("EADDatabaseSettings"));
-builder.Services.AddSingleton<UserService>();
+
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "EAD Backend API",
+        Description = "API for EAD Backend Services"
+    });
+});
+
+
+//builder.Services.AddSingleton<ICartsService, MongoCartsService>();
+//builder.Services.AddSingleton<ICategoriesService, MongoCategoriesService>();
+builder.Services.AddSingleton<IUserService, UsersService>();
+//builder.Services.AddSingleton<IOrdersService, MongoOrdersService>();
+//builder.Services.AddSingleton<IProductsService, MongoProductsService>();
+//builder.Services.AddSingleton<ISellersService, MongoSellersService>();
+//builder.Services.AddSingleton<IOrderedProductService, MongoOrderedProductService>();
+
+// Add services to the container.
+//builder.Services.Configure<CartsDbSettings>(
+//    builder.Configuration.GetSection("CartsDb"));
+//builder.Services.Configure<CategoriesDbSettings>(
+//    builder.Configuration.GetSection("CategoriesDb"));
+builder.Services.Configure<UsersDatabaseSettings>(
+    builder.Configuration.GetSection("UsersDb"));
+//builder.Services.Configure<OrdersDbSettings>(
+//    builder.Configuration.GetSection("OrdersDb"));
+//var productsDbSettings = builder.Services.Configure<ProductsDbSettings>(
+//    builder.Configuration.GetSection("ProductsDb"));
+//builder.Services.Configure<SellersDbSettings>(
+//    builder.Configuration.GetSection("SellersDb"));
+
+builder.Services.AddControllers
+        (options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true).
+    AddJsonOptions(options =>
+        options.JsonSerializerOptions.PropertyNamingPolicy = null);
+
 var app = builder.Build();
 
-/// <summary>
-/// 
-/// </summary>
-app.MapGet("/", () => "Users API!");
-
-/// <summary>
-/// Get all movies
-/// </summary>
-app.MapGet("/api/users", async (UserService userService) => await userService.Get());
-
-/// <summary>
-/// Get a movie by id
-/// </summary>
-app.MapGet("/api/users/{id}", async (UserService userService, string id) =>
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    var user = await userService.Get(id);
-    return user is null ? Results.NotFound() : Results.Ok(user);
-});
+    app.UseDeveloperExceptionPage();
 
-/// <summary>
-/// Create a new movie
-/// </summary>
-app.MapPost("/api/users/add", async (UserService userService, User user) =>
-{
-    await userService.Create(user);
-    return Results.Ok();
-});
+    // Enable middleware to serve generated Swagger as a JSON endpoint
+    app.UseSwagger();
 
-/// <summary>
-/// Update a movie
-/// </summary>
-app.MapPut("/api/users/{id}", async (UserService userService, string id, User updatedUser) =>
-{
-    var user = await userService.Get(id);
-    if (user is null) return Results.NotFound();
+    // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+    // specifying the Swagger JSON endpoint.
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "EAD Backend API v1");
+        options.RoutePrefix = "swagger";  // Ensure this is correct
+    });
 
-    updatedUser.Id = user.Id;
-    await userService.Update(id, updatedUser);
+}
 
-    return Results.NoContent();
-});
+app.UseHttpsRedirection();
 
-/// <summary>
-/// Delete a movie
-/// </summary>
-app.MapDelete("/api/users/{id}", async (UserService userService, string id) =>
-{
-    var user = await userService.Get(id);
-    if (user is null) return Results.NotFound();
+app.UseAuthorization();
 
-    await userService.Remove(user.Id);
-
-    return Results.NoContent();
-});
+app.MapControllers();
 
 app.Run();

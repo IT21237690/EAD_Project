@@ -1,16 +1,34 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-namespace UserAPI.Data
+namespace EAD_Backend.Models
 {
+    [BsonIgnoreExtraElements]
     public class User
     {
         [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string Id { get; set; }
-        public string email { get; set; }
-        public string firstname { get; set; }
-        public string lastname { get; set; }
-        public string password { get; set; }
+        [JsonIgnore] // Exclude from API input
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } // MongoDB ObjectId as string
 
+        [BsonElement("email")]
+        [Required(ErrorMessage = "Email is required")]
+        public string Email { get; set; } // Email as a separate property
+
+        public string Password { get; set; }
+
+        public string Name { get; set; }
+
+        [BsonIgnoreIfNull]
+        public string Address { get; set; }
+
+        [JsonIgnore]
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+
+        [JsonIgnore]
+        [BsonIgnoreIfDefault]
+        public DateTime LastActiveDate { get; set; } = DateTime.UtcNow;
     }
 }
