@@ -17,12 +17,15 @@ namespace EAD_Backend.Controllers
 
         private readonly IUserService _usersService;
 
+        private readonly IProductService _productsService;
+
         private readonly ILogger<OrderController> _logger;
 
-        public OrderController(IOrderService orderService, IUserService usersService, ILogger<OrderController> logger)
+        public OrderController(IOrderService orderService, IUserService usersService, IProductService productsService, ILogger<OrderController> logger)
         {
             _orderService = orderService;
             _usersService = usersService;
+            _productsService = productsService;
             _logger = logger;
         }
 
@@ -56,9 +59,14 @@ namespace EAD_Backend.Controllers
                 return BadRequest("ProductId is required.");
             }
 
+            // Validate that quantity is provided
+            if (newOrder.Quantity <= 0)
+            {
+                return BadRequest("Quantity must be greater than zero.");
+            }
+
             // Get email from the authenticated user using claims
             var emailClaim = User.FindFirst(ClaimTypes.Email); // Use ClaimTypes.Email to get the email claim
-
             var email = emailClaim?.Value; // This will give you the email or null if not found
 
             if (string.IsNullOrEmpty(email))
@@ -74,9 +82,19 @@ namespace EAD_Backend.Controllers
                 return NotFound("Customer not found.");
             }
 
+            // Get product details to calculate total amount
+            var product = await _productsService.GetById(newOrder.ProductId);
+            if (product == null)
+            {
+                return NotFound("Product not found.");
+            }
+
             // Assign the email and address to the new order
             newOrder.CustomerEmail = email;
             newOrder.CustomerAddress = customer.Address; // Ensure this property exists in your Customer model
+
+            // Calculate the total amount
+            newOrder.TotalAmount = product.Price * newOrder.Quantity; // Assuming Price is a decimal property in the Product model
 
             // Proceed to create the order
             await _orderService.Create(newOrder);
@@ -86,23 +104,34 @@ namespace EAD_Backend.Controllers
 
 
 
-        // Update order by id
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> Update(string id, [FromBody] Order updateOrder)
-        {
-            var order = await _orderService.GetById(id);
 
-            if (order is null)
+        [HttpPut("update-quantity/{id}")]
+        public async Task<IActionResult> UpdateOrderQuantity(string id, [FromBody] int quantity)
+        {
+            // Validate that quantity is positive
+            if (quantity <= 0)
             {
-                return NotFound();
+                return BadRequest("Quantity must be greater than zero.");
             }
 
-            updateOrder.Id = order.Id; // Retain the original ID
-
-            await _orderService.Update(id, updateOrder); // Ensure your service updates based on ID
-
-            return NoContent();
+            try
+            {
+                // Call the service method to update the order quantity
+                await _orderService.UpdateOrderQuantity(id, quantity);
+                return Ok(new { message = "Order quantity and total amount updated successfully." });
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Order not found.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
+
+
 
         // Cancel order by id
         [HttpDelete("cancel/{id}")]
@@ -119,5 +148,38 @@ namespace EAD_Backend.Controllers
 
             return NoContent();
         }
+
+
+        [Authorize(Roles = "admin")] // Ensure only admins can access this route
+        [HttpPut("{id}/status/{status}")]
+        public async Task<IActionResult> UpdateOrderStatus(string id, string status)
+        {
+            // Validate status input
+            if (string.IsNullOrEmpty(status) ||
+                (status != "dispatched" && status != "delivered"))
+            {
+                return BadRequest("Status must be either 'dispatched' or 'delivered'.");
+            }
+
+            // Fetch the existing order by ID
+            var existingOrder = await _orderService.GetById(id);
+            if (existingOrder == null)
+            {
+                return NotFound("Order not found.");
+            }
+
+            // Update the status of the existing order
+            existingOrder.Status = status;
+
+            // Call the Update method in the service to update the order
+            await _orderService.UpdateStatus(id, existingOrder);
+
+            // Return a success message with the updated order status
+            return Ok(new { message = "Order status updated successfully.", status = existingOrder.Status });
+        }
+
+
+
+
     }
 }

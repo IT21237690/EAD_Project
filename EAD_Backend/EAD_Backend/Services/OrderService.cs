@@ -39,7 +39,8 @@ namespace EAD_Backend.Services
                 throw new ArgumentNullException(nameof(newOrder), "Order cannot be null.");
 
             // Check if the product is available for ordering
-            var product = await _productService.GetById(newOrder.ProductId) ?? throw new InvalidOperationException("Product does not exist.");
+            var product = await _productService.GetById(newOrder.ProductId)
+                          ?? throw new InvalidOperationException("Product does not exist.");
 
             // If product is sold
             if (product.Sold)
@@ -57,17 +58,61 @@ namespace EAD_Backend.Services
             await _productService.Update(product.Id, product);
         }
 
+        // Update order quantity
+        public async Task<Order> UpdateOrderQuantity(string id, int newQuantity)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new ArgumentNullException(nameof(id), "Order ID cannot be null or empty.");
 
+            if (newQuantity <= 0)
+                throw new ArgumentException("Quantity must be greater than zero.", nameof(newQuantity));
 
-        // Update order by id
-        public async Task Update(string id, Order updateOrder)
+            // Retrieve the order by ID
+            var order = await _ordersCollection.Find(o => o.Id == id).FirstOrDefaultAsync();
+            if (order == null)
+            {
+                throw new KeyNotFoundException("Order not found.");
+            }
+
+            // Check if the order status is "pending"
+            if (order.Status != "pending")
+            {
+                throw new InvalidOperationException("Order quantity can only be updated if the order status is pending.");
+            }
+
+            // Retrieve the product by ID
+            var product = await _productService.GetById(order.ProductId);
+            if (product == null)
+            {
+                throw new KeyNotFoundException("Product not found.");
+            }
+
+            // Update the order quantity
+            order.Quantity = newQuantity;
+
+            // Update the total amount based on the new quantity
+            order.TotalAmount = product.Price * newQuantity;
+
+            // Save the updated order
+            await _ordersCollection.ReplaceOneAsync(o => o.Id == id, order);
+
+            return order;
+        }
+
+        // Update order status
+        public async Task UpdateStatus(string id, Order updateOrder)
         {
             var existingOrder = await GetById(id);
             if (existingOrder == null)
+            {
                 throw new KeyNotFoundException("Order not found.");
+            }
 
-            updateOrder.Id = existingOrder.Id; // Keep the original ID
-            await _ordersCollection.ReplaceOneAsync(x => x.Id == id, updateOrder);
+            // Only update the status, keep other properties unchanged
+            existingOrder.Status = updateOrder.Status;
+
+            // Update the order in the database
+            await _ordersCollection.ReplaceOneAsync(x => x.Id == id, existingOrder);
         }
 
         // Cancel order by id
@@ -75,8 +120,25 @@ namespace EAD_Backend.Services
         {
             var order = await GetById(id);
             if (order == null)
+            {
                 throw new KeyNotFoundException("Order not found.");
+            }
 
+            // If the order is already processed, it can't be canceled
+            if (order.Status != "pending")
+            {
+                throw new InvalidOperationException("Only pending orders can be canceled.");
+            }
+
+            // If the order is canceled, mark the product as available again
+            var product = await _productService.GetById(order.ProductId);
+            if (product != null)
+            {
+                product.Sold = false;
+                await _productService.Update(product.Id, product);
+            }
+
+            // Delete the order
             await _ordersCollection.DeleteOneAsync(x => x.Id == id);
         }
     }

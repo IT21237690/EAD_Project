@@ -13,12 +13,23 @@ namespace EAD_Backend.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; } // MongoDB ObjectId as string
 
+        // Changed quantity to an integer for validation and arithmetic
+        [Required(ErrorMessage = "Quantity is required")]
+        public int Quantity { get; set; }
+
         // Keep these properties private or simply ignore them in JSON serialization
         [JsonIgnore]
         public string CustomerEmail { get; set; }
 
         [JsonIgnore]
         public string CustomerAddress { get; set; }
+
+        [JsonIgnore]
+        public string Status { get; set; } = "pending";
+
+        // Total amount calculated based on product price * quantity
+        [JsonIgnore]
+        public double TotalAmount { get; set; }
 
         [JsonIgnore]
         public DateTime CreatedDate { get; set; } = DateTime.Now;

@@ -79,14 +79,15 @@ public class UsersService : IUserService
         {
             Subject = new ClaimsIdentity(new[]
             {
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.Role) // Assuming Role is a string in your User class
-                }),
-            Expires = DateTime.UtcNow.AddHours(1), // Token expiration
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role, user.Role) // Assuming Role is a string in your User class
+        }),
+            Expires = DateTime.UtcNow.AddDays(1), // Token expiration set to 24 hours
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token); // Return the generated token
     }
+
 }

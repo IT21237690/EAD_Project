@@ -16,10 +16,11 @@ namespace EAD_Backend.Models
         [Required(ErrorMessage = "ProductName is required")]
         public string ProductName { get; set; }
 
-        public string Price { get; set; }
+        public double Price { get; set; }
 
         public string Description { get; set; }
 
+        [JsonIgnore]
         public bool Sold { get; set; } = false;
 
         [JsonIgnore]

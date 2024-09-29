@@ -13,10 +13,13 @@ namespace EAD_Backend.Services.Interfaces
         // Create new order
         Task Create(Order newOrder);
 
-        // Update order by id
-        Task Update(string id, Order updateOrder);
+        // Update order quantity by id (only if status is pending)
+        Task<Order> UpdateOrderQuantity(string id, int newQuantity);
 
-        // Cancel order by id
+        // Update status of an order by id
+        Task UpdateStatus(string id, Order updateOrder);
+
+        // Cancel order by id (only if status is pending)
         Task Cancel(string id);
     }
 }
