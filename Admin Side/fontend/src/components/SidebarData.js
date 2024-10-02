@@ -4,6 +4,7 @@ export const SidebarData = [
     {
         title:"Student Managment",
         link:"/"
+        
     },
 
     {
@@ -16,10 +17,6 @@ export const SidebarData = [
         link: "/displayteacher"
     },
 
-    {
-        title:"Enrollment Managment",
-        link: "/allCourse"
-    },
 
     {
 
@@ -36,10 +33,6 @@ export const SidebarData = [
     {
         title:"Notices Managment",
         link: "/announcement"
-    },
-    {
-        title:"Class scheduling and hall allocation Managment",
-        link: "/displayclass"
     },
 
     {
