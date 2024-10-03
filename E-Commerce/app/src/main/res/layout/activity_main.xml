@@ -10,7 +10,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="168dp"
+        android:layout_marginTop="120dp"
         android:text="@string/welcome"
         android:textSize="55sp"
         android:textColor="#ffffff"
@@ -23,12 +23,12 @@
         android:id="@+id/imageView3"
         android:layout_width="349dp"
         android:layout_height="312dp"
-        android:layout_marginTop="284dp"
-        android:contentDescription="@string/loadingimage"
+        android:layout_marginTop="210dp"
+        android:contentDescription="@string/main"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/main" />
+        android:src="@drawable/main" />
 
     <LinearLayout
         android:layout_width="match_parent"
