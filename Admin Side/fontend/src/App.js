@@ -15,7 +15,7 @@ import AdminPage from './pages/displayteacherReq';
 import Addstaff from "./pages/staffadd";
 import DisplayS from "./pages/displaystaff";
 import Updatestaff from "./pages/updatestaff";
-import DisplayT from "./pages/displayorders";
+import DisplayOrders from "./pages/displayorders";
 import Updateteacher from "./pages/updateteacher";
 import DisplayInventory from "./pages/DisplayInventory";
 import CreateInventory from "./pages/CreateInventory";
@@ -91,7 +91,7 @@ function MainApp() {
                   <Route path="/addstaff" element={<ProtectedRoute><Addstaff /></ProtectedRoute>} />
                   <Route path="/displaystaff" element={<ProtectedRoute><DisplayS /></ProtectedRoute>} />
                   <Route path="/updatestaff/:id" element={<ProtectedRoute><Updatestaff /></ProtectedRoute>} />
-                  <Route path="/displayteacher" element={<ProtectedRoute><DisplayT /></ProtectedRoute>} />
+                  <Route path="/displayorders" element={<ProtectedRoute><DisplayOrders /></ProtectedRoute>} />
                   <Route path="/updateteacher/:id" element={<ProtectedRoute><Updateteacher /></ProtectedRoute>} />
                   <Route path="/allCourse/addCourse" element={<ProtectedRoute><AddCourses /></ProtectedRoute>} />
                   <Route path="/allCourse" element={<ProtectedRoute><AllCourses /></ProtectedRoute>} />

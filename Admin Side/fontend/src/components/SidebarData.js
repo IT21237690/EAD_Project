@@ -14,7 +14,7 @@ export const SidebarData = [
 
     {
         title:"Order Management",
-        link: "/displayteacher"
+        link: "/displayorders"
     },
 
     {       
