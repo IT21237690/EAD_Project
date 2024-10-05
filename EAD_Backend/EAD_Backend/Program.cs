@@ -13,6 +13,18 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 
+// Add CORS policy to allow all domains
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder => builder
+            .AllowAnyOrigin()    
+            .AllowAnyMethod()    
+            .AllowAnyHeader()); 
+});
+
+
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
@@ -46,29 +58,19 @@ builder.Services.AddSwaggerGen(c =>
 
 
 
-//builder.Services.AddSingleton<ICartsService, MongoCartsService>();
-//builder.Services.AddSingleton<ICategoriesService, MongoCategoriesService>();
+
 builder.Services.AddSingleton<IUserService, UsersService>();
 builder.Services.AddSingleton<IOrderService, OrderService>();
 builder.Services.AddSingleton<IProductService, ProductService>();
-//builder.Services.AddSingleton<ISellersService, MongoSellersService>();
-//builder.Services.AddSingleton<IOrderedProductService, MongoOrderedProductService>();
 
-// Add services to the container.
-//builder.Services.Configure<CartsDbSettings>(
-//    builder.Configuration.GetSection("CartsDb"));
-//builder.Services.Configure<CategoriesDbSettings>(
-//    builder.Configuration.GetSection("CategoriesDb"));
+
 builder.Services.Configure<UsersDatabaseSettings>(
     builder.Configuration.GetSection("UsersDb"));
 builder.Services.Configure<ProductsDatabaseSettings>(
     builder.Configuration.GetSection("ProductsDb"));
 builder.Services.Configure<OrdersDatabaseSettings>(
     builder.Configuration.GetSection("OrdersDb"));
-//var productsDbSettings = builder.Services.Configure<ProductsDbSettings>(
-//    builder.Configuration.GetSection("ProductsDb"));
-//builder.Services.Configure<SellersDbSettings>(
-//    builder.Configuration.GetSection("SellersDb"));
+
 
 builder.Services.AddControllers
         (options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true).
@@ -107,6 +109,8 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "EAD Backend API v1");
     options.RoutePrefix = "swagger"; // or string.Empty for root
 });
+
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 app.UseRouting();

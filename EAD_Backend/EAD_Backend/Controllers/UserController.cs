@@ -41,8 +41,11 @@ namespace EAD_Backend.Controllers
 
         // Get all users
         [HttpGet("all")]
-        public async Task<List<User>> Get() =>
-            await _userService.Get();
+        public async Task<List<User>> Get()
+        {
+            var users = await _userService.Get();
+            return users;
+        }
 
         // Get user by email
         [HttpGet("email/{email}")]
@@ -101,7 +104,7 @@ namespace EAD_Backend.Controllers
                 return NotFound();
             }
 
-            await _userService.Remove(user.Id); // Assuming you still need the ID to remove
+            await _userService.Remove(user.Email); // Assuming you still need the ID to remove
 
             return NoContent();
         }

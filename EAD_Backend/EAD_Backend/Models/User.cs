@@ -26,7 +26,6 @@ namespace EAD_Backend.Models
         [BsonIgnoreIfNull]
         public string Address { get; set; }
 
-        [JsonIgnore]
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
         [JsonIgnore]
