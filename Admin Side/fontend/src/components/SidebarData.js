@@ -2,27 +2,19 @@
 
 export const SidebarData = [
     {
-        title:"Student Managment",
+        title:"User Managment",
         link:"/"
         
     },
 
     {
-        title:"Non-Accademic Staff Managment",
+        title:"Product Management",
         link: "/displaystaff"
     },
 
     {
-        title:"Accademic Staff Managment",
+        title:"Order Management",
         link: "/displayteacher"
-    },
-
-
-    {
-
-        title:"Payment Managment",
-        link: "/payment"
-
     },
 
     {       
@@ -30,16 +22,6 @@ export const SidebarData = [
         link: "/InventoryManagment"
     },
 
-    {
-        title:"Notices Managment",
-        link: "/announcement"
-    },
-
-    {
-
-        title:"Reporting and analytics Managment",
-        link: "/Reporting and analytics Managment"
-    },
 
    
 ]

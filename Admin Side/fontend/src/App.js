@@ -8,14 +8,14 @@ import "./new.css";
 import { jwtDecode } from "jwt-decode";
 
 // Pages and components
-import Display from "./pages/displaystudents";
+import Display from "./pages/displayusers";
 import Addstudent from "./pages/studentadd";
-import UpdateStudent from "./pages/updatestudent";
+import UpdateStudent from "./pages/updateuser";
 import AdminPage from './pages/displayteacherReq';
 import Addstaff from "./pages/staffadd";
 import DisplayS from "./pages/displaystaff";
 import Updatestaff from "./pages/updatestaff";
-import DisplayT from "./pages/displayteachers";
+import DisplayT from "./pages/displayorders";
 import Updateteacher from "./pages/updateteacher";
 import DisplayInventory from "./pages/DisplayInventory";
 import CreateInventory from "./pages/CreateInventory";
