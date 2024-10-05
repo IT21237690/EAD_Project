@@ -21,5 +21,8 @@ namespace EAD_Backend.Services.Interfaces
 
         // Cancel order by id (only if status is pending)
         Task Cancel(string id);
+
+        Task<List<Order>> GetOrdersByCustomerEmail(string email);
+
     }
 }

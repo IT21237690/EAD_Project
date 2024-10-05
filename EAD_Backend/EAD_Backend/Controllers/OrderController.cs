@@ -178,6 +178,42 @@ namespace EAD_Backend.Controllers
             return Ok(new { message = "Order status updated successfully.", status = existingOrder.Status });
         }
 
+        // Get orders by user email
+        [HttpGet("cutomerOrders")]
+        public async Task<IActionResult> GetOrdersByCustomerEmail()
+        {
+            // Get email from the authenticated user using claims
+            var emailClaim = User.FindFirst(ClaimTypes.Email);
+            var email = emailClaim?.Value;
+
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Email not found in the token.");
+            }
+
+            var orders = await _orderService.GetOrdersByCustomerEmail(email);
+
+            if (orders == null || !orders.Any())
+            {
+                return NotFound("No orders found for this customer.");
+            }
+
+            // Return only the specified fields for each order
+            var orderResponse = orders.Select(order => new
+            {
+                order.Id,
+                order.Quantity,
+                order.CustomerEmail,
+                order.CustomerAddress,
+                order.Status,
+                order.TotalAmount,
+                order.CreatedDate
+            });
+
+            return Ok(orderResponse);
+        }
+
+
 
 
 

@@ -141,5 +141,18 @@ namespace EAD_Backend.Services
             // Delete the order
             await _ordersCollection.DeleteOneAsync(x => x.Id == id);
         }
+
+        // Get orders by customer email
+        public async Task<List<Order>> GetOrdersByCustomerEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentNullException(nameof(email), "Email cannot be null or empty.");
+            }
+
+            return await _ordersCollection.Find(order => order.CustomerEmail == email).ToListAsync();
+        }
+
+
     }
 }
