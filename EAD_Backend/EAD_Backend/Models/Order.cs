@@ -38,4 +38,19 @@ namespace EAD_Backend.Models
         [Required(ErrorMessage = "ProductId is required")]
         public string ProductId { get; set; } // Reference to the product being ordered
     }
+
+
+    public class OrderDto
+    {
+        public string Id { get; set; }
+        public int Quantity { get; set; }
+        public string CustomerEmail { get; set; }
+        public string CustomerAddress { get; set; }
+        public string Status { get; set; }
+        public double TotalAmount { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string ProductId { get; set; }
+    }
+
+
 }

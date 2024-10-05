@@ -29,10 +29,28 @@ namespace EAD_Backend.Controllers
             _logger = logger;
         }
 
+        [Authorize(Roles = "admin")]
         // Get all orders
         [HttpGet("all")]
-        public async Task<List<Order>> Get() =>
-            await _orderService.Get();
+        public async Task<List<OrderDto>> Get()
+        {
+            var orders = await _orderService.Get();
+
+            // Map Order to OrderDto
+            var orderDtos = orders.Select(order => new OrderDto
+            {
+                Id = order.Id,
+                Quantity = order.Quantity,
+                CustomerEmail = order.CustomerEmail,
+                CustomerAddress = order.CustomerAddress,
+                Status = order.Status,
+                TotalAmount = order.TotalAmount,
+                CreatedDate = order.CreatedDate,
+                ProductId = order.ProductId
+            }).ToList();
+
+            return orderDtos;
+        }
 
         // Get order by id
         [HttpGet("id/{id}")]
@@ -49,7 +67,6 @@ namespace EAD_Backend.Controllers
         }
 
 
-        [Authorize(Roles = "admin")] // Change this role as needed
         [HttpPost("place")]
         public async Task<IActionResult> Post([FromBody] Order newOrder)
         {
