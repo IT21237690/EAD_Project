@@ -53,6 +53,7 @@ function Sidebar() {
                 style={{
                   borderRadius: "0.5rem",
                   transition: "background-color 0.3s",
+                  cursor: "pointer",
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#007bff")}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "")}
@@ -72,6 +73,7 @@ function Sidebar() {
               style={{
                 borderRadius: "0.5rem",
                 transition: "background-color 0.3s",
+                cursor: "pointer",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#dc3545")}
               onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "")}

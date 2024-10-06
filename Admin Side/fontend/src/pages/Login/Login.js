@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -87,9 +87,20 @@ const Login = () => {
                 Login
               </button>
             </div>
+
           </form>
+          
         </div>
       </div>
+      <div className="d-grid gap-2">
+              <Link to ="/useradd"
+              >
+                <button type="submit" className="btn btn-primary">
+                Singn In
+              </button>
+              </Link>
+              
+            </div>
     </div>
   );
 }  
