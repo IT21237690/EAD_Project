@@ -89,18 +89,18 @@ const Login = () => {
             </div>
 
           </form>
-          
-        </div>
-      </div>
-      <div className="d-grid gap-2">
-              <Link to ="/useradd"
+          <div className="d-grid gap-2 justify-content-center mt-4" >
+          <Link to ="/useradd"
               >
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-secondary">
                 Singn In
               </button>
               </Link>
               
             </div>
+        </div>
+      </div>
+      
     </div>
   );
 }  

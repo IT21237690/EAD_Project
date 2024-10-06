@@ -9,7 +9,7 @@ export const SidebarData = [
 
     {
         title:"Product Management",
-        link: "/displaystaff"
+        link: "/displayproducts"
     },
 
     {

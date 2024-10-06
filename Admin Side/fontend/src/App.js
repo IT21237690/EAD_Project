@@ -8,11 +8,19 @@ import { jwtDecode } from "jwt-decode";
 
 // Pages and components
 import Display from "./pages/Users/displayusers.js";
-import UpdateStudent from "./pages/Users/updateuser.js";
+import UpdateUser from "./pages/Users/updateuser.js";
 
 import DisplayOrders from "./pages/Orders/displayorders.js";
+
 import SignIn from "./pages/SignIn/signIn.tsx";
-import Login from './pages/Login/Login.js';  // Your login page
+import Login from './pages/Login/Login.js';  
+
+// Product 
+import DisplayProducts from "./pages/Product/displayproducts.js";
+import AddProduct from "./pages/Product/addproducts.js";
+import UpdateProduct from "./pages/Product/updateproducts.js";
+
+
 
 // ProtectedRoute component to guard routes
 const ProtectedRoute = ({ children }) => {
@@ -70,9 +78,12 @@ function MainApp() {
                 {/* Add other protected routes here */}
                 <Route path="/" element={<ProtectedRoute><Display /></ProtectedRoute>} />
                 <Route path="/" element={<ProtectedRoute><Display /></ProtectedRoute>} />
-                  <Route path="/update/:id" element={<ProtectedRoute><UpdateStudent /></ProtectedRoute>} />
+                  <Route path="/update/:id" element={<ProtectedRoute><UpdateUser /></ProtectedRoute>} />
                   
                   <Route path="/displayorders" element={<ProtectedRoute><DisplayOrders /></ProtectedRoute>} />
+                  <Route path="/displayproducts" element={<ProtectedRoute><DisplayProducts /></ProtectedRoute>} />
+                  <Route path="/productadd" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
+                  <Route path="/productupdate" element={<ProtectedRoute><UpdateProduct /></ProtectedRoute>} />
 
               </Routes>
             </div>
