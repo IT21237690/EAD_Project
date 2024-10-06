@@ -2,6 +2,9 @@ package com.example.e_commerceapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,5 +20,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val buttonNavigate: Button = findViewById(R.id.SignUpButtonWelcomePage)
+        buttonNavigate.setOnClickListener {
+            val intent = Intent(this, SignUp::class.java)
+            startActivity(intent)
+        }
     }
 }
