@@ -43,13 +43,13 @@ function Display() {
 
   return (
     <div>
-      <h1 className="text-center my-4">Orders Dashboard</h1>
+      <h1 className="text-center my-4">Users Dashboard</h1>
       <div className="container">
         <div className="input-group mb-4">
           <input
             type="text"
             className="form-control"
-            placeholder="Search by order ID, customer email, or product ID"
+            placeholder="Search"
             aria-label="Search"
             aria-describedby="search-btn"
             value={searchTerm}
@@ -58,9 +58,9 @@ function Display() {
           <button className="btn btn-outline-secondary" type="button" id="search-btn">
             Search
           </button>
-          {/* <Link to="/adminreq" className="btn btn-primary ms-2">
-            Teacher Requests
-          </Link> */}
+          <Link to="/useradd" className="btn btn-primary ms-2">
+            Add User
+          </Link>
         </div>
 
       {/* Table */}

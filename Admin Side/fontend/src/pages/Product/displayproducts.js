@@ -56,7 +56,7 @@ function DisplayProducts() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
   
-      setData((prevData) => prevData.filter((item) => item._id !== Id));
+      setData((prevData) => prevData.filter((item) => item.Id !== Id));
       Swal.fire("Successfully Deleted", "Product has been deleted", "success");
     } catch (error) {
       console.error("Error deleting product:", error);
@@ -79,7 +79,7 @@ function DisplayProducts() {
           <input
             type="text"
             className="form-control"
-            placeholder="Search by order ID, customer email, or product ID"
+            placeholder="Search product Name"
             aria-label="Search"
             aria-describedby="search-btn"
             value={searchTerm}

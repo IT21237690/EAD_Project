@@ -43,56 +43,60 @@ function UpdateUser() {
   }
 
   return (
-    <section>
-      <div className="container col-lg-5">
-        <form onSubmit={handleSubmit}>
-          <div className="form-group py-3">
-            <h4>Update User Details</h4>
+    <section className="py-5">
+      <div className="container col-lg-6">
+        <div className="card shadow-sm">
+          <div className="card-header">
+            <h4 className="mb-0">Update User Details</h4>
           </div>
-          <div className="form-group">
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              className="form-control"
-              value={Name}
-              onChange={(e) => setName(e.target.value)}
-            />
+          <div className="card-body">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="name">Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={Name}
+                  onChange={(e) => setName(e.target.value)}
+                />
 
-            <label htmlFor="address" className="mt-2">Address</label>
-            <input
-              type="text"
-              placeholder="Enter address"
-              className="form-control"
-              value={Address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
+                <label htmlFor="address" className="mt-3">Address</label>
+                <input
+                  type="text"
+                  placeholder="Enter address"
+                  className="form-control"
+                  value={Address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
 
-            <label htmlFor="email" className="mt-2">Email</label>
-            <input
-              type="email"
-              placeholder="Enter Email"
-              className="form-control"
-              value={Email}
-              onChange={(e) => setEmail(e.target.value)}
-              readOnly 
-            />
+                <label htmlFor="email" className="mt-3">Email</label>
+                <input
+                  type="email"
+                  placeholder="Enter Email"
+                  className="form-control"
+                  value={Email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  readOnly 
+                />
 
-            <label htmlFor="Role" className="mt-2">Role</label>
-            <input
-              type="text"
-              placeholder="Enter Role"
-              className="form-control"
-              value={Role}
-              onChange={(e) => setRole(e.target.value)}
-            />
+                <label htmlFor="role" className="mt-3">Role</label>
+                <input
+                  type="text"
+                  placeholder="Enter Role"
+                  className="form-control"
+                  value={Role}
+                  onChange={(e) => setRole(e.target.value)}
+                />
+              </div>
+              <button className="btn btn-success mt-3 w-100">Save</button>
+            </form>
           </div>
-          <button className="btn btn-success mt-2">Save</button>
-        </form>
-        <br />
-        <Link to="/addstudent" className="btn btn-success">Add User</Link>
+          <div className="card-footer text-center">
+          </div>
+        </div>
       </div>
     </section>
   );
-};
+}
 
 export default UpdateUser;

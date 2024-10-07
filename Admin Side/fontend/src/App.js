@@ -12,7 +12,7 @@ import UpdateUser from "./pages/Users/updateuser.js";
 
 import DisplayOrders from "./pages/Orders/displayorders.js";
 
-import SignIn from "./pages/SignIn/signIn.tsx";
+import SignIn from "./pages/SignIn/signIn.js";
 import Login from './pages/Login/Login.js';  
 
 // Product 

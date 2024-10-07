@@ -1,21 +1,26 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 function UpdateProduct() {
-  const { id } = useParams(); // Assuming `id` is the email
-  const[productname,setProductName]= useState("");
-  const[description,setDescription]=useState("");
-  const [price, setPrice] = useState("");
-
+  const { id } = useParams();
+  const [productname, setProductName] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [image, setImage] = useState(null); // State to store the uploaded image
+  const [existingImage, setExistingImage] = useState(''); // State for existing image URL
 
   useEffect(() => {
     axios.get(`http://localhost:5008/api/Product/id/${id}`)
       .then(res => {
-        const user = res.data;
-        setProductName(user.productname);
-        setDescription(user.description);
-        setPrice(user.price);
+        const product = res.data;
+        setProductName(product.ProductName);
+        setDescription(product.Description);
+        setPrice(product.Price);
+        setExistingImage(product.ImageBase64); // Set existing image URL
+
+        // Debugging: Log the existing image data
+        console.log("Existing Image Data:", product.Image);
       })
       .catch(err => console.log(err));
   }, [id]);
@@ -23,13 +28,24 @@ function UpdateProduct() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    const updated = {
-      productname,
-      description,
-      price,
+    // Create FormData object
+    const formData = new FormData();
+    formData.append('Name', productname);
+    formData.append('Price', price);
+    formData.append('Description', description);
+    if (image) { // Append the new image if it exists
+      formData.append('Image', image);
+    }
+
+    const token = localStorage.getItem("token");
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     };
-    
-    axios.put(`http://localhost:5008/api/Product/update/${id}`, updated)
+
+    axios.put(`http://localhost:5008/api/Product/update/${id}`, formData, config)
       .then(res => {
         alert(res.data);
       })
@@ -38,22 +54,28 @@ function UpdateProduct() {
       });
   }
 
+  const handleImageClick = () => {
+    document.getElementById('imageUpload').click(); // Trigger file input click
+  };
+
   return (
-    <section>
-      <div className="container col-lg-5">
-        <form onSubmit={handleSubmit}>
-          <div className="form-group py-3">
-            <h4>Update Product Details</h4>
-          </div>
+    <section className="py-5 bg-light">
+      <div className="container col-lg-6">
+        <h4 className="text-center mb-4">Update Product Details</h4>
+        <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow">
           <div className="form-group">
             <label htmlFor="productname">Product Name</label>
             <input
               type="text"
               className="form-control"
+              placeholder="Enter Product Name"
               value={productname}
               onChange={(e) => setProductName(e.target.value)}
+              required
             />
+          </div>
 
+          <div className="form-group">
             <label htmlFor="description" className="mt-2">Product Description</label>
             <input
               type="text"
@@ -61,8 +83,11 @@ function UpdateProduct() {
               className="form-control"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              required
             />
+          </div>
 
+          <div className="form-group">
             <label htmlFor="price" className="mt-2">Product Price</label>
             <input
               type="text"
@@ -70,15 +95,42 @@ function UpdateProduct() {
               className="form-control"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              readOnly 
+              required
             />
-
-            
           </div>
-          <button className="btn btn-success mt-2">Save</button>
+
+          <div className="form-group">
+            <label htmlFor="image" className="mt-2">Choose an image:</label>
+            <div 
+              className="d-flex align-items-center cursor-pointer" 
+              onClick={handleImageClick}
+            >
+              {/* Display the existing image */}
+              {existingImage && (
+                <img 
+                  src={`data:image/jpeg;base64,${existingImage}`} 
+                  alt={productname} 
+                  className="img-thumbnail me-2" 
+                  style={{ width: "100px", height: "100px" }} 
+                />
+              )}
+              <input
+                type="file"
+                className="form-control-file mt-2"
+                id="imageUpload"
+                accept=".jpg,.png,.jpeg"
+                onChange={(e) => {
+                  setImage(e.target.files[0]); // Set the selected file
+                }}
+                style={{ display: 'none' }} // Hide the file input
+              />
+              <span className="btn btn-secondary">Upload New Image</span>
+            </div>
+          </div>
+
+          <button className="btn btn-success mt-3 w-100">Save</button>
         </form>
         <br />
-        <Link to="/addstudent" className="btn btn-success">Add User</Link>
       </div>
     </section>
   );
