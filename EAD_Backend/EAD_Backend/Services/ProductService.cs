@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using EAD_Backend.Models;
 using EAD_Backend.Models.DatabaseSettings;
 using EAD_Backend.Services.Interfaces;
+using System.IO;
 
 namespace EAD_Backend.Services
 {
@@ -30,24 +31,54 @@ namespace EAD_Backend.Services
             return await _productsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
         }
 
-        // Create new product
-        public async Task Create(Product newProduct)
+        // Create new product using ProductDto
+        public async Task Create(ProductDto newProductDto)
         {
-            if (newProduct == null)
-                throw new ArgumentNullException(nameof(newProduct), "Product cannot be null.");
+            if (newProductDto == null)
+                throw new ArgumentNullException(nameof(newProductDto), "Product data cannot be null.");
+
+            // Convert image to Base64
+            string base64Image = null;
+            if (newProductDto.Image != null)
+            {
+                using var memoryStream = new MemoryStream();
+                await newProductDto.Image.CopyToAsync(memoryStream);
+                base64Image = Convert.ToBase64String(memoryStream.ToArray());
+            }
+
+            var newProduct = new Product
+            {
+                ProductName = newProductDto.Name,
+                Description = newProductDto.Description,
+                ImageBase64 = base64Image,
+                Price = newProductDto.Price,
+                Sold = false,
+                CreatedDate = DateTime.Now
+            };
 
             await _productsCollection.InsertOneAsync(newProduct);
         }
 
-        // Update product by id
-        public async Task Update(string id, Product updateProduct)
+        // Update product by id using ProductDto
+        public async Task Update(string id, ProductDto updateProductDto)
         {
             var existingProduct = await GetById(id);
             if (existingProduct == null)
                 throw new KeyNotFoundException("Product not found.");
 
-            updateProduct.Id = existingProduct.Id; // Keep the original ID
-            await _productsCollection.ReplaceOneAsync(x => x.Id == id, updateProduct);
+            existingProduct.ProductName = updateProductDto.Name;
+            existingProduct.Price = updateProductDto.Price;
+            existingProduct.Description = updateProductDto.Description;
+
+            // Update image if provided
+            if (updateProductDto.Image != null)
+            {
+                using var memoryStream = new MemoryStream();
+                await updateProductDto.Image.CopyToAsync(memoryStream);
+                existingProduct.ImageBase64 = Convert.ToBase64String(memoryStream.ToArray());
+            }
+
+            await _productsCollection.ReplaceOneAsync(x => x.Id == id, existingProduct);
         }
 
         // Remove product by id
@@ -60,10 +91,14 @@ namespace EAD_Backend.Services
             await _productsCollection.DeleteOneAsync(x => x.Id == id);
         }
 
-        // Placeholder for any product-related functionality like Login, if needed
-        public async Task Login(string username, string password)
+        public async Task Update(string id, Product updateProduct)
         {
-            throw new NotImplementedException();
+            var existingProduct = await GetById(id);
+            if (existingProduct == null)
+                throw new KeyNotFoundException("Product not found.");
+
+            updateProduct.Id = existingProduct.Id; // Keep the original ID
+            await _productsCollection.ReplaceOneAsync(x => x.Id == id, updateProduct);
         }
     }
 }

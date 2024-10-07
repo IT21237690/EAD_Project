@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using EAD_Backend.Models;
-using EAD_Backend.Services;
 using EAD_Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace EAD_Backend.Controllers
 {
@@ -37,29 +38,33 @@ namespace EAD_Backend.Controllers
         }
 
         // Create new product
-        [Authorize(Roles = "admin")]
         [HttpPost("add")]
-        public async Task<IActionResult> Post([FromBody] Product newProduct)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> AddProduct([FromForm] ProductDto productDto)
         {
-            await _productService.Create(newProduct);
+            if (productDto == null || productDto.Image == null)
+            {
+                return BadRequest("Product data or image is missing.");
+            }
 
-            return CreatedAtAction(nameof(GetById), new { id = newProduct.Id }, newProduct);
+            // Save the product to the database using the ProductService
+            await _productService.Create(productDto);
+
+            return Ok(new { message = "Product added successfully." });
         }
 
         // Update product by id
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> Update(string id, Product updateProduct)
+        public async Task<IActionResult> UpdateProduct(string id, [FromForm] ProductDto productDto)
         {
-            var product = await _productService.GetById(id);
+            var existingProduct = await _productService.GetById(id);
 
-            if (product is null)
+            if (existingProduct == null)
             {
                 return NotFound();
             }
 
-            updateProduct.Id = product.Id; // Retain the original ID
-
-            await _productService.Update(id, updateProduct); // Ensure your service updates based on ID
+            await _productService.Update(id, productDto);
 
             return NoContent();
         }
@@ -75,9 +80,11 @@ namespace EAD_Backend.Controllers
                 return NotFound();
             }
 
-            await _productService.Remove(product.Id); // Assuming you need the ID to remove
+            await _productService.Remove(product.Id);
 
             return NoContent();
         }
+
+        // Optional: Additional methods for image upload can go here
     }
 }

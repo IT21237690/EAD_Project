@@ -67,14 +67,16 @@ namespace EAD_Backend.Controllers
         }
 
 
-        [HttpPost("place")]
-        public async Task<IActionResult> Post([FromBody] Order newOrder)
+        [HttpPost("place/{productId}")]
+        public async Task<IActionResult> Post(string productId, [FromBody] Order newOrder)
         {
-            // Validate that only ProductId is provided
-            if (string.IsNullOrEmpty(newOrder.ProductId))
+            
+            if (string.IsNullOrEmpty(productId))
             {
                 return BadRequest("ProductId is required.");
             }
+
+            newOrder.ProductId = productId;
 
             // Validate that quantity is provided
             if (newOrder.Quantity <= 0)
@@ -83,8 +85,8 @@ namespace EAD_Backend.Controllers
             }
 
             // Get email from the authenticated user using claims
-            var emailClaim = User.FindFirst(ClaimTypes.Email); // Use ClaimTypes.Email to get the email claim
-            var email = emailClaim?.Value; // This will give you the email or null if not found
+            var emailClaim = User.FindFirst(ClaimTypes.Email);
+            var email = emailClaim?.Value;
 
             if (string.IsNullOrEmpty(email))
             {
@@ -100,7 +102,7 @@ namespace EAD_Backend.Controllers
             }
 
             // Get product details to calculate total amount
-            var product = await _productsService.GetById(newOrder.ProductId);
+            var product = await _productsService.GetById(productId);
             if (product == null)
             {
                 return NotFound("Product not found.");
@@ -108,16 +110,18 @@ namespace EAD_Backend.Controllers
 
             // Assign the email and address to the new order
             newOrder.CustomerEmail = email;
-            newOrder.CustomerAddress = customer.Address; // Ensure this property exists in your Customer model
+            newOrder.CustomerAddress = customer.Address;
+            newOrder.ImageBase64 = product.ImageBase64;
 
             // Calculate the total amount
-            newOrder.TotalAmount = product.Price * newOrder.Quantity; // Assuming Price is a decimal property in the Product model
+            newOrder.TotalAmount = product.Price * newOrder.Quantity;
 
             // Proceed to create the order
             await _orderService.Create(newOrder);
 
             return CreatedAtAction(nameof(GetById), new { id = newOrder.Id }, newOrder);
         }
+
 
 
 

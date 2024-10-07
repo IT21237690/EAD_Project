@@ -11,14 +11,12 @@ public interface IProductService
     Task<Product?> GetById(string id);
 
     // Update product by id
-    Task Update(string id, Product updateProduct);
+    Task Update(string id, ProductDto updateProductDto);
 
-    // Create new product
-    Task Create(Product newProduct);
+    // Create new product using ProductDto
+    Task Create(ProductDto newProductDto);
 
     // Remove product by id
     Task Remove(string id);
-
-    // Placeholder for any additional functionality (optional)
-    Task Login(string username, string password);
+    Task Update(string id, Product product);
 }

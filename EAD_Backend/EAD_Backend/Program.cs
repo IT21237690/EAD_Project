@@ -9,25 +9,24 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 // Add CORS policy to allow all domains
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder => builder
-            .AllowAnyOrigin()    
-            .AllowAnyMethod()    
-            .AllowAnyHeader()); 
+    options.AddPolicy("AllowAll", builder =>
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
 });
 
-
-
+// Add Swagger services
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
+    c.OperationFilter<AddFileParametersOperationFilter>(); // Custom operation filter
 
     // Define the security scheme
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -56,13 +55,10 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-
-
-
+// Register application services
 builder.Services.AddSingleton<IUserService, UsersService>();
 builder.Services.AddSingleton<IOrderService, OrderService>();
 builder.Services.AddSingleton<IProductService, ProductService>();
-
 
 builder.Services.Configure<UsersDatabaseSettings>(
     builder.Configuration.GetSection("UsersDb"));
@@ -71,13 +67,15 @@ builder.Services.Configure<ProductsDatabaseSettings>(
 builder.Services.Configure<OrdersDatabaseSettings>(
     builder.Configuration.GetSection("OrdersDb"));
 
+// Configure controllers and JSON options
+builder.Services.AddControllers(options =>
+{
+    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+})
+.AddJsonOptions(options =>
+    options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
-builder.Services.AddControllers
-        (options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true).
-    AddJsonOptions(options =>
-        options.JsonSerializerOptions.PropertyNamingPolicy = null);
-
-
+// Add authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -94,10 +92,9 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -111,7 +108,6 @@ app.UseSwaggerUI(options =>
 });
 
 app.UseCors("AllowAll");
-
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
@@ -120,3 +116,31 @@ app.MapControllers();
 
 app.Run();
 
+// Custom operation filter for handling file parameters
+public class AddFileParametersOperationFilter : IOperationFilter
+{
+    public void Apply(OpenApiOperation operation, OperationFilterContext context)
+    {
+        var parameters = operation.Parameters;
+
+        // Iterate through all parameters in the API description
+        foreach (var param in context.ApiDescription.ParameterDescriptions)
+        {
+            // Check if the parameter type is IFormFile
+            if (param.ModelMetadata.ModelType == typeof(IFormFile))
+            {
+                parameters.Add(new OpenApiParameter
+                {
+                    Name = param.Name,
+                    In = ParameterLocation.Query, // Change this line
+                    Required = param.IsRequired,
+                    Schema = new OpenApiSchema
+                    {
+                        Type = "string",
+                        Format = "binary" // Indicates file upload
+                    }
+                });
+            }
+        }
+    }
+}

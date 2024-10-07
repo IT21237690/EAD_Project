@@ -20,6 +20,8 @@ namespace EAD_Backend.Models
 
         public string Description { get; set; }
 
+        public string? ImageBase64 { get; set; } // Nullable to make it optional
+
         [JsonIgnore]
         public bool Sold { get; set; } = false;
 
@@ -27,4 +29,17 @@ namespace EAD_Backend.Models
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
     }
+
+    public class ProductDto
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public IFormFile Image { get; set; } // Image file
+        public double Price { get; set; }
+    }
+
+
+
+
 }

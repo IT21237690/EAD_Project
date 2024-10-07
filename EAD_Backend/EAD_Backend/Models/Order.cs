@@ -34,9 +34,12 @@ namespace EAD_Backend.Models
         [JsonIgnore]
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
-        // Allow this property to be set from the API input
-        [Required(ErrorMessage = "ProductId is required")]
+  
+        [JsonIgnore]
         public string ProductId { get; set; } // Reference to the product being ordered
+
+        [JsonIgnore]
+        public string? ImageBase64 { get; set; }
     }
 
 
@@ -50,6 +53,8 @@ namespace EAD_Backend.Models
         public double TotalAmount { get; set; }
         public DateTime CreatedDate { get; set; }
         public string ProductId { get; set; }
+
+        public string? ImageBase64 { get; set; }
     }
 
 
