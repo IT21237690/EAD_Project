@@ -83,7 +83,7 @@ function MainApp() {
                   <Route path="/displayorders" element={<ProtectedRoute><DisplayOrders /></ProtectedRoute>} />
                   <Route path="/displayproducts" element={<ProtectedRoute><DisplayProducts /></ProtectedRoute>} />
                   <Route path="/productadd" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
-                  <Route path="/productupdate" element={<ProtectedRoute><UpdateProduct /></ProtectedRoute>} />
+                  <Route path="/updateproduct/:id" element={<ProtectedRoute><UpdateProduct /></ProtectedRoute>} />
 
               </Routes>
             </div>

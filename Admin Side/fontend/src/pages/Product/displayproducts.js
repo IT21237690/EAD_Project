@@ -20,79 +20,55 @@ function DisplayProducts() {
             },
           }
         );
+        console.log("Fetched products:", response.data); // Log fetched data
         setData(response.data);
       } catch (error) {
         console.error(error);
       }
     };
-
+  
     fetchData();
   }, []);
+  
 
-  const handleCancel = async (Id) => {
+  const handleDelete = async (Id) => {
+    console.log("Product ID received for deletion:", Id); 
     if (!Id) {
       console.log("Invalid ID");
       return;
     }
-
+  
+    const token = localStorage.getItem('token');
+    console.log("Deleting product with ID:", Id);
+  
     try {
-      await fetch(`http://localhost:5008/api/Product/cancel/${Id}`, {
+      const response = await fetch(`http://localhost:5008/api/Product/delete/${Id}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
       });
-      setData((prevData) => prevData.filter((item) => item.Id !== Id));
+      
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        console.error("Delete failed:", errorMessage);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      setData((prevData) => prevData.filter((item) => item._id !== Id));
       Swal.fire("Successfully Deleted", "Product has been deleted", "success");
     } catch (error) {
-      console.error(error);
+      console.error("Error deleting product:", error);
     }
   };
+  
 
-  //   const changeProductStatus = async (Id, currentStatus) => {
-  //     let newStatus = currentStatus;
 
-  //     if (currentStatus === "pending") {
-  //       newStatus = "dispatched";
-  //     } else if (currentStatus === "dispatched") {
-  //       newStatus = "delivered";
-  //     } else {
-  //       Swal.fire('Already Delivered', 'This order has been completed', 'info');
-  //       return;
-  //     }
-
-  //     try {
-  //       const token = localStorage.getItem('token');
-  //       await axios.put(`http://localhost:5008/api/Order/${Id}/status/${newStatus}`, null, {
-  //         headers: {
-  //           'Authorization': `Bearer ${token}`,
-  //           'accept': '*/*',
-  //         },
-  //       });
-
-  //       Swal.fire('Status Changed', `Order status changed to ${newStatus}`, 'success');
-
-  //       const refreshedData = await axios.get("http://localhost:5008/api/Order/all", {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       });
-  //       setData(refreshedData.data);
-
-  //     } catch (error) {
-  //       if (error.response && error.response.status === 403) {
-  //         Swal.fire('Unauthorized Action', 'You do not have permission to change the status of this order.', 'error');
-  //       } else {
-  //         console.error(error);
-  //         Swal.fire('Error', 'Unable to change status', 'error');
-  //       }
-  //     }
-  //   };
 
   const filteredData = data.filter(
     (product) =>
       product.ProductName.toLowerCase().includes(searchTerm.toLowerCase())
-    //   ||
-    //     product.Description.toLowerCase().includes(searchTerm.toLowerCase())
-    //  ||
-    // product.Price.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -127,14 +103,23 @@ function DisplayProducts() {
               <tr>
                 <th scope="col">Product Name</th>
                 <th scope="col">Product Description</th>
+                <th scope="col">Image</th>
                 <th scope="col">Product Price</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredData.map((product) => (
-                <tr key={product.ProductName}>
+                <tr key={product.Id}>
+                  <td>{product.ProductName}</td>
                   <td>{product.Description}</td>
+                  <td style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <img 
+                      src={`data:image/jpeg;base64,${product.ImageBase64}`} 
+                      alt={product.ProductName} 
+                      style={{ width: "100px", height: "100px" }} 
+                    />
+                  </td>
                   <td>{product.Price}</td>
                   <td className="d-flex justify-content-around">
                     <Link to={`/updateproduct/${product.Id}`}>
@@ -147,9 +132,9 @@ function DisplayProducts() {
                     </Link>
                     <button
                       className="btn btn-sm btn-danger"
-                      onClick={() => handleCancel(product.Id)}
+                      onClick={() => handleDelete(product.Id)}
                     >
-                      Cancel
+                      Delete
                     </button>
                   </td>
                 </tr>
