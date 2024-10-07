@@ -9,7 +9,7 @@ import { jwtDecode } from "jwt-decode";
 // Pages and components
 import Display from "./pages/Users/displayusers.js";
 import UpdateUser from "./pages/Users/updateuser.js";
-
+import  AddUser from "./pages/Users/adduser.js"
 import DisplayOrders from "./pages/Orders/displayorders.js";
 
 import SignIn from "./pages/SignIn/signIn.js";
@@ -74,6 +74,7 @@ function MainApp() {
               <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/useradd" element={<SignIn />} />
+                <Route path="/adduser" element={<AddUser />} />
 
                 {/* Add other protected routes here */}
                 <Route path="/" element={<ProtectedRoute><Display /></ProtectedRoute>} />

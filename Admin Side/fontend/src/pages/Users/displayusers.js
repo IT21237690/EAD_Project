@@ -58,7 +58,7 @@ function Display() {
           <button className="btn btn-outline-secondary" type="button" id="search-btn">
             Search
           </button>
-          <Link to="/useradd" className="btn btn-primary ms-2">
+          <Link to="/adduser" className="btn btn-primary ms-2">
             Add User
           </Link>
         </div>
