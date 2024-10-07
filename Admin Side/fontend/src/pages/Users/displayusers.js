@@ -8,9 +8,11 @@ function Display() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const baseURL = process.env.REACT_APP_BASE_URL;
+
   useEffect(() => {
     axios
-      .get("http://localhost:5008/api/User/all")
+      .get(`${baseURL}/api/User/all`)
       .then((res) => setData(res.data))
       .catch((err) => console.error(err));
   }, []);
@@ -21,7 +23,7 @@ function Display() {
       return;
     }
 
-    fetch(`http://localhost:5008/api/User/delete/${encodeURIComponent(Email)}`, {
+    fetch(`${baseURL}/api/User/delete/${encodeURIComponent(Email)}`, {
       method: "DELETE",
     })
       .then((res) => {

@@ -8,11 +8,13 @@ function DisplayOrders() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const baseURL = process.env.REACT_APP_BASE_URL;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get("http://localhost:5008/api/Order/all", {
+        const response = await axios.get(`${baseURL}/api/Order/all`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -33,7 +35,7 @@ function DisplayOrders() {
     }
 
     try {
-      await fetch(`http://localhost:5008/api/Order/cancel/${Id}`, {
+      await fetch(`${baseURL}/api/Order/cancel/${Id}`, {
         method: "DELETE",
       });
       setData((prevData) => prevData.filter(item => item.Id !== Id));
@@ -57,7 +59,7 @@ function DisplayOrders() {
   
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5008/api/Order/${Id}/status/${newStatus}`, null, {
+      await axios.put(`${baseURL}/api/Order/${Id}/status/${newStatus}`, null, {
         headers: {
           'Authorization': `Bearer ${token}`, 
           'accept': '*/*',
@@ -66,7 +68,7 @@ function DisplayOrders() {
   
       Swal.fire('Status Changed', `Order status changed to ${newStatus}`, 'success');
   
-      const refreshedData = await axios.get("http://localhost:5008/api/Order/all", {
+      const refreshedData = await axios.get(`${baseURL}/api/Order/all`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

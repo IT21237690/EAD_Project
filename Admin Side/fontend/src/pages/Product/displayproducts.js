@@ -8,12 +8,14 @@ function DisplayProducts() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const baseURL = process.env.REACT_APP_BASE_URL;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://localhost:5008/api/Product/all",
+          `${baseURL}/api/Product/all`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -42,7 +44,7 @@ function DisplayProducts() {
     console.log("Deleting product with ID:", Id);
   
     try {
-      const response = await fetch(`http://localhost:5008/api/Product/delete/${Id}`, {
+      const response = await fetch(`${baseURL}/api/Product/delete/${Id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

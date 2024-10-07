@@ -7,11 +7,13 @@ function UpdateProduct() {
   const [productname, setProductName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [image, setImage] = useState(null); // State to store the uploaded image
-  const [existingImage, setExistingImage] = useState(''); // State for existing image URL
+  const [image, setImage] = useState(null);
+  const [existingImage, setExistingImage] = useState('');
+
+  const baseURL = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
-    axios.get(`http://localhost:5008/api/Product/id/${id}`)
+    axios.get(`${baseURL}/api/Product/id/${id}`)
       .then(res => {
         const product = res.data;
         setProductName(product.ProductName);
@@ -45,7 +47,7 @@ function UpdateProduct() {
       },
     };
 
-    axios.put(`http://localhost:5008/api/Product/update/${id}`, formData, config)
+    axios.put(`${baseURL}/api/Product/update/${id}`, formData, config)
       .then(res => {
         alert(res.data);
       })

@@ -15,11 +15,13 @@ const SignIn = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const baseURL = process.env.REACT_APP_BASE_URL;
+
   const handleSignIn = async (e) => {
     e.preventDefault();
     setError(""); // Reset the error state before submitting
     try {
-      const response = await axios.post("http://localhost:5008/api/User/add", {
+      const response = await axios.post(`${baseURL}/api/User/add`, {
         name,
         address,
         email,

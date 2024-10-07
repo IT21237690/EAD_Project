@@ -10,8 +10,10 @@ function UpdateUser() {
   const [Role, setRole] = useState('');
   const [CreatedDate, setCreatedDate] = useState('');
 
+  const baseURL = process.env.REACT_APP_BASE_URL;
+
   useEffect(() => {
-    axios.get(`http://localhost:5008/api/User/email/${id}`)
+    axios.get(`${baseURL}/api/User/email/${id}`)
       .then(res => {
         const user = res.data;
         setName(user.Name);
@@ -33,7 +35,7 @@ function UpdateUser() {
       Role
     };
     
-    axios.put(`http://localhost:5008/api/User/update/${Email}`, updated)
+    axios.put(`${baseURL}/api/User/update/${Email}`, updated)
       .then(res => {
         alert(res.data);
       })

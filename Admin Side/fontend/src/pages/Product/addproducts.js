@@ -14,6 +14,8 @@ const AddProduct = () => {
   const [imageFile, setImageFile] = useState(null);
   const navigate = useNavigate();
 
+  const baseURL = process.env.REACT_APP_BASE_URL;
+
   const handleAddProduct = async (e) => {
     e.preventDefault();
     setError(""); // Reset the error state before submitting
@@ -29,7 +31,7 @@ const AddProduct = () => {
       formData.append('Image', imageFile); // Ensures 'Image' key in FormData
 
       // Make the API request
-      const response = await axios.post("http://localhost:5008/api/Product/add", formData, {
+      const response = await axios.post(`${baseURL}/api/Product/add`, formData, {
         headers: {
           Authorization: `Bearer ${token}`, // Include Bearer token
           accept: '*/*', // Add accept header
