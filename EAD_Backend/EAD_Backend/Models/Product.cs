@@ -9,7 +9,6 @@ namespace EAD_Backend.Models
     public class Product
     {
         [BsonId]
-        [JsonIgnore] // Exclude from API input
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; } // MongoDB ObjectId as string
 
