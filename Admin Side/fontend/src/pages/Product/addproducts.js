@@ -192,6 +192,7 @@ const AddProduct = () => {
   const[description,setDescription]=useState("");
   const [price, setPrice] = useState("");
   const [error, setError] = useState("");
+  const [imageFile, setImageFile] = useState(null);
   const navigate = useNavigate();
 
   const handleAddProduct = async (e) => {
@@ -204,6 +205,7 @@ const AddProduct = () => {
         productname,
         description,
         price,
+        imageFile,
       },
       {
         headers: {
@@ -272,7 +274,16 @@ const AddProduct = () => {
                 required
               />
             </div>
-            
+            <label htmlFor="image">Choose an image:</label>
+            <input
+              type="file"
+              className="form-control-file mt-2"
+              id="image"
+              accept=".jpg,.png, .jpeg"
+              onChange={(e) => {
+                setImageFile(e.target.files[0])
+              }}
+            />
             
             {error && <p className="text-danger">{error}</p>}
             <div className="d-grid gap-2">
