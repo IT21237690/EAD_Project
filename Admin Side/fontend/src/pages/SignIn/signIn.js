@@ -1,4 +1,4 @@
-
+// Author: P.G.D.B.D Peramuna
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -17,6 +17,7 @@ const SignIn = () => {
 
   const baseURL = process.env.REACT_APP_BASE_URL;
 
+  // handle user sign in, a form is used
   const handleSignIn = async (e) => {
     e.preventDefault();
     setError(""); // Reset the error state before submitting
@@ -36,24 +37,6 @@ const SignIn = () => {
           autoClose: 3000, 
         });
       }
-      // Access the token using "Token" as per your response format
-      //   const token = response.data.Token;
-
-      //   if (token) {
-      //     localStorage.setItem("token", token); // Store token in localStorage
-
-      //     // Decode token to check role
-      //     const decodedToken = jwtDecode (token);
-      //     const role = decodedToken.role;
-
-      //     if (role === "admin") {
-      //       navigate("/"); // Redirect to the dashboard or main page
-      //     } else {
-      //       setError("You are not authorized to access this page.");
-      //     }
-      //   } else {
-      //     setError("Login failed. Please try again.");
-      //   }
     } catch (error) {
       if (error.response && error.response.data) {
         setError(error.response.data.message || "Invalid credentials");

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-// User display as a table
+// User display as a table, delete user is also provided
 function Display() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");

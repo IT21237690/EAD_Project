@@ -2,19 +2,22 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 
+
+// This is to update prduct, a form format is used
 function UpdateProduct() {
   const { id } = useParams();
-  const [productname, setProductName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
+  const [productname, setProductName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
-  const [existingImage, setExistingImage] = useState('');
+  const [existingImage, setExistingImage] = useState("");
 
   const baseURL = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
-    axios.get(`${baseURL}/api/Product/id/${id}`)
-      .then(res => {
+    axios
+      .get(`${baseURL}/api/Product/id/${id}`)
+      .then((res) => {
         const product = res.data;
         setProductName(product.ProductName);
         setDescription(product.Description);
@@ -24,7 +27,7 @@ function UpdateProduct() {
         // Debugging: Log the existing image data
         console.log("Existing Image Data:", product.Image);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }, [id]);
 
   function handleSubmit(e) {
@@ -32,11 +35,12 @@ function UpdateProduct() {
 
     // Create FormData object
     const formData = new FormData();
-    formData.append('Name', productname);
-    formData.append('Price', price);
-    formData.append('Description', description);
-    if (image) { // Append the new image if it exists
-      formData.append('Image', image);
+    formData.append("Name", productname);
+    formData.append("Price", price);
+    formData.append("Description", description);
+    if (image) {
+      // Append the new image if it exists
+      formData.append("Image", image);
     }
 
     const token = localStorage.getItem("token");
@@ -47,17 +51,18 @@ function UpdateProduct() {
       },
     };
 
-    axios.put(`${baseURL}/api/Product/update/${id}`, formData, config)
-      .then(res => {
+    axios
+      .put(`${baseURL}/api/Product/update/${id}`, formData, config)
+      .then((res) => {
         alert(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         alert(err.message);
       });
   }
 
   const handleImageClick = () => {
-    document.getElementById('imageUpload').click(); // Trigger file input click
+    document.getElementById("imageUpload").click(); // Trigger file input click
   };
 
   return (
@@ -78,7 +83,9 @@ function UpdateProduct() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="description" className="mt-2">Product Description</label>
+            <label htmlFor="description" className="mt-2">
+              Product Description
+            </label>
             <input
               type="text"
               placeholder="Enter description"
@@ -90,7 +97,9 @@ function UpdateProduct() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="price" className="mt-2">Product Price</label>
+            <label htmlFor="price" className="mt-2">
+              Product Price
+            </label>
             <input
               type="text"
               placeholder="Enter price"
@@ -102,18 +111,20 @@ function UpdateProduct() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="image" className="mt-2">Choose an image:</label>
-            <div 
-              className="d-flex align-items-center cursor-pointer" 
+            <label htmlFor="image" className="mt-2">
+              Choose an image:
+            </label>
+            <div
+              className="d-flex align-items-center cursor-pointer"
               onClick={handleImageClick}
             >
               {/* Display the existing image */}
               {existingImage && (
-                <img 
-                  src={`data:image/jpeg;base64,${existingImage}`} 
-                  alt={productname} 
-                  className="img-thumbnail me-2" 
-                  style={{ width: "100px", height: "100px" }} 
+                <img
+                  src={`data:image/jpeg;base64,${existingImage}`}
+                  alt={productname}
+                  className="img-thumbnail me-2"
+                  style={{ width: "100px", height: "100px" }}
                 />
               )}
               <input
@@ -124,7 +135,7 @@ function UpdateProduct() {
                 onChange={(e) => {
                   setImage(e.target.files[0]); // Set the selected file
                 }}
-                style={{ display: 'none' }} // Hide the file input
+                style={{ display: "none" }} // Hide the file input
               />
               <span className="btn btn-secondary">Upload New Image</span>
             </div>
@@ -136,6 +147,6 @@ function UpdateProduct() {
       </div>
     </section>
   );
-};
+}
 
 export default UpdateProduct;

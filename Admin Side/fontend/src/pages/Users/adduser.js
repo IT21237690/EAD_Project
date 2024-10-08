@@ -1,10 +1,13 @@
+// Author: P.G.D.B.D Peramuna
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
-import { toast, ToastContainer } from "react-toastify"; // Import 'ToastContainer' and 'toast'
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+// Adding a user is done using a form here, users can be added accordingly and they are given access
 const AddUser = () => {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -16,7 +19,7 @@ const AddUser = () => {
 
   const baseURL = process.env.REACT_APP_BASE_URL;
 
-  const handleSignIn = async (e) => {
+  const handleAddUser = async (e) => {
     e.preventDefault();
     setError(""); // Reset the error state before submitting
     try {
@@ -49,7 +52,7 @@ const AddUser = () => {
       <div className="col-md-4">
         <div className="card p-4 shadow-sm">
           <h3 className="text-center mb-4">Add User</h3>
-          <form onSubmit={handleSignIn}>
+          <form onSubmit={handleAddUser}>
             <div className="mb-3">
               <label htmlFor="name">Name</label>
               <input

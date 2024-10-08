@@ -1,8 +1,9 @@
+// Author: P.G.D.B.D Peramuna
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 // Login  page for the web app
 const Login = () => {
@@ -28,7 +29,7 @@ const Login = () => {
         localStorage.setItem("token", token); // Store token in localStorage
 
         // Decode token to check role
-        const decodedToken = jwtDecode (token);
+        const decodedToken = jwtDecode(token);
         const role = decodedToken.role;
 
         if (role === "admin") {
@@ -49,9 +50,8 @@ const Login = () => {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100 "
-    // style={{ backgroundColor: "rgba(128, 128, 128, 0.5)" }}
-    >
+    <div
+      className="container d-flex justify-content-center align-items-center vh-100 " >
       <div className="col-md-4">
         <div className="card p-4 shadow-sm">
           <h3 className="text-center mb-4">Login</h3>
@@ -90,22 +90,18 @@ const Login = () => {
                 Login
               </button>
             </div>
-
           </form>
-          <div className="d-grid gap-2 justify-content-center mt-4" >
-          <Link to ="/useradd"
-              >
-                <button type="submit" className="btn btn-secondary">
+          <div className="d-grid gap-2 justify-content-center mt-4">
+            <Link to="/useradd">
+              <button type="submit" className="btn btn-secondary">
                 Singn In
               </button>
-              </Link>
-              
-            </div>
+            </Link>
+          </div>
         </div>
       </div>
-      
     </div>
   );
-}  
+};
 
 export default Login;

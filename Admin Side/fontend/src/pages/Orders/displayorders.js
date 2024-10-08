@@ -1,9 +1,12 @@
+// Author: P.G.D.B.D Peramuna
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
+// This is to display orders in a table, also this includes edit and delete of the order together with status change
 function DisplayOrders() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -108,9 +111,6 @@ function DisplayOrders() {
           <button className="btn btn-outline-secondary" type="button" id="search-btn">
             Search
           </button>
-          {/* <Link to="/adminreq" className="btn btn-primary ms-2">
-            Teacher Requests
-          </Link> */}
         </div>
 
         <div className="table-responsive">

@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
-import { toast, ToastContainer } from "react-toastify"; 
-import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+// Add product page as a form
 const AddProduct = () => {
   const [productname, setProductName] = useState("");
   const [description, setDescription] = useState("");
@@ -25,18 +26,22 @@ const AddProduct = () => {
 
       // Create FormData object
       const formData = new FormData();
-      formData.append('Name', productname); 
-      formData.append('Price', price);
-      formData.append('Description', description);
-      formData.append('Image', imageFile); 
+      formData.append("Name", productname);
+      formData.append("Price", price);
+      formData.append("Description", description);
+      formData.append("Image", imageFile);
 
       // Make the API request
-      const response = await axios.post(`${baseURL}/api/Product/add`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`, 
-          accept: '*/*', 
-        },
-      });
+      const response = await axios.post(
+        `${baseURL}/api/Product/add`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accept: "*/*",
+          },
+        }
+      );
 
       if (response.status === 201 || response.status === 200) {
         toast.success("Product added successfully!", {
@@ -44,7 +49,7 @@ const AddProduct = () => {
           autoClose: 3000,
         });
 
-        navigate('/displayproducts'); 
+        navigate("/displayproducts");
       }
     } catch (error) {
       if (error.response && error.response.data) {
@@ -56,13 +61,21 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100" style={{ background: "linear-gradient(to bottom, #f8f9fa, #e9ecef)" }}>
+    <div
+      className="container d-flex justify-content-center align-items-center vh-100"
+      style={{ background: "linear-gradient(to bottom, #f8f9fa, #e9ecef)" }}
+    >
       <div className="col-md-4">
-        <div className="card p-4 shadow-sm" style={{ backgroundColor: "rgba(255, 255, 255, 0.9)" }}>
+        <div
+          className="card p-4 shadow-sm"
+          style={{ backgroundColor: "rgba(255, 255, 255, 0.9)" }}
+        >
           <h3 className="text-center mb-4 text-primary">Add Product</h3>
           <form onSubmit={handleAddProduct}>
             <div className="mb-3">
-              <label htmlFor="productname" className="form-label">Product Name</label>
+              <label htmlFor="productname" className="form-label">
+                Product Name
+              </label>
               <input
                 type="text"
                 id="productname"
@@ -74,7 +87,9 @@ const AddProduct = () => {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="description" className="form-label">Product Description</label>
+              <label htmlFor="description" className="form-label">
+                Product Description
+              </label>
               <input
                 type="text"
                 id="description"
@@ -86,7 +101,9 @@ const AddProduct = () => {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="price" className="form-label">Price</label>
+              <label htmlFor="price" className="form-label">
+                Price
+              </label>
               <input
                 type="number"
                 id="price"
@@ -98,7 +115,9 @@ const AddProduct = () => {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="image" className="form-label">Choose an image</label>
+              <label htmlFor="image" className="form-label">
+                Choose an image
+              </label>
               <input
                 type="file"
                 className="form-control-file"
@@ -112,7 +131,9 @@ const AddProduct = () => {
 
             {error && <p className="text-danger text-center">{error}</p>}
             <div className="d-grid gap-2">
-              <button type="submit" className="btn btn-primary">Add</button>
+              <button type="submit" className="btn btn-primary">
+                Add
+              </button>
             </div>
           </form>
           <ToastContainer />
@@ -121,6 +142,5 @@ const AddProduct = () => {
     </div>
   );
 };
-
 
 export default AddProduct;

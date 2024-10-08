@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 
+
+// function to update user details is provided
 function UpdateUser() {
   const { id } = useParams(); // Assuming `id` is the email
   const [Name, setName] = useState('');

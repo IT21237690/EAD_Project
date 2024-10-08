@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+// Display product details in table, also include delete product
 function DisplayProducts() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,7 +23,7 @@ function DisplayProducts() {
             },
           }
         );
-        console.log("Fetched products:", response.data); // Log fetched data
+        // console.log("Fetched products:", response.data); // Log fetched data
         setData(response.data);
       } catch (error) {
         console.error(error);
