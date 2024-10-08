@@ -22,6 +22,6 @@ code {
   background-color: #1B3B6F;
 }
 
-.my-container{
-  background-color: #ffffff;
+.my-container {
+  background: linear-gradient(to bottom, #e0e0e0, #a0a0a0); /* Use background instead of background-color */
 }

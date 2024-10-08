@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { SidebarData } from "./SidebarData";
 import { Nav, ListGroup, Button } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FaSignOutAlt } from "react-icons/fa"; // Importing an icon for logout
+import { FaSignOutAlt } from "react-icons/fa"; 
 
-function Sidebar() {
+// sidebar for the web app, all the pages use a common sidebar
+function Sidebar() { 
   const location = useLocation();
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(null);
@@ -29,7 +30,6 @@ function Sidebar() {
 
   return (
     <>
-      {/* Toggle button for mobile */}
       <Button
         variant="primary"
         className="d-lg-none m-3"
@@ -64,7 +64,6 @@ function Sidebar() {
                 {item.title}
               </ListGroup.Item>
             ))}
-            {/* Logout button as the last item */}
             <ListGroup.Item
               as="li"
               action
@@ -109,7 +108,6 @@ function Sidebar() {
                 {item.title}
               </ListGroup.Item>
             ))}
-            {/* Logout button as the last item */}
             <ListGroup.Item
               as="li"
               action

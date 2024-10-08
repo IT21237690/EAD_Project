@@ -1,5 +1,4 @@
-//import React from 'react';
-
+// This handles the paths to navigate in the sidebar
 export const SidebarData = [
     {
         title:"User Managment",

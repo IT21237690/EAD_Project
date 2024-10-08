@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+// User display as a table
 function Display() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -51,7 +52,7 @@ function Display() {
           <input
             type="text"
             className="form-control"
-            placeholder="Search"
+            placeholder="Search by Name"
             aria-label="Search"
             aria-describedby="search-btn"
             value={searchTerm}

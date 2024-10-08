@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
-import { toast, ToastContainer } from "react-toastify"; // Import 'ToastContainer' and 'toast'
+import { toast, ToastContainer } from "react-toastify"; 
 import 'react-toastify/dist/ReactToastify.css';
 
 const AddProduct = () => {
@@ -25,29 +25,26 @@ const AddProduct = () => {
 
       // Create FormData object
       const formData = new FormData();
-      formData.append('Name', productname); // Ensures 'Name' key in FormData
-      formData.append('Price', price); // Ensures 'Price' key in FormData
-      formData.append('Description', description); // Ensures 'Description' key in FormData
-      formData.append('Image', imageFile); // Ensures 'Image' key in FormData
+      formData.append('Name', productname); 
+      formData.append('Price', price);
+      formData.append('Description', description);
+      formData.append('Image', imageFile); 
 
       // Make the API request
       const response = await axios.post(`${baseURL}/api/Product/add`, formData, {
         headers: {
-          Authorization: `Bearer ${token}`, // Include Bearer token
-          accept: '*/*', // Add accept header
+          Authorization: `Bearer ${token}`, 
+          accept: '*/*', 
         },
       });
 
-      // Check if the status is 201 (Created)
-      if (response.status === 201) {
-        // Display a success toast notification
+      if (response.status === 201 || response.status === 200) {
         toast.success("Product added successfully!", {
           position: "top-center",
           autoClose: 3000,
         });
 
-        // Optionally, navigate to another page or reset the form
-        // navigate('/products'); // Uncomment this to navigate after success
+        navigate('/displayproducts'); 
       }
     } catch (error) {
       if (error.response && error.response.data) {
@@ -59,13 +56,13 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
+    <div className="container d-flex justify-content-center align-items-center vh-100" style={{ background: "linear-gradient(to bottom, #f8f9fa, #e9ecef)" }}>
       <div className="col-md-4">
-        <div className="card p-4 shadow-sm">
-          <h3 className="text-center mb-4">Add Product</h3>
+        <div className="card p-4 shadow-sm" style={{ backgroundColor: "rgba(255, 255, 255, 0.9)" }}>
+          <h3 className="text-center mb-4 text-primary">Add Product</h3>
           <form onSubmit={handleAddProduct}>
             <div className="mb-3">
-              <label htmlFor="name">Product Name</label>
+              <label htmlFor="productname" className="form-label">Product Name</label>
               <input
                 type="text"
                 id="productname"
@@ -77,7 +74,7 @@ const AddProduct = () => {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="description">Product Description</label>
+              <label htmlFor="description" className="form-label">Product Description</label>
               <input
                 type="text"
                 id="description"
@@ -89,11 +86,9 @@ const AddProduct = () => {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="price" className="form-label">
-                Price
-              </label>
+              <label htmlFor="price" className="form-label">Price</label>
               <input
-                type="text"
+                type="number"
                 id="price"
                 className="form-control"
                 placeholder="Enter Product Price"
@@ -102,32 +97,30 @@ const AddProduct = () => {
                 required
               />
             </div>
-            <label htmlFor="image">Choose an image:</label>
-            <input
-              type="file"
-              className="form-control-file mt-2"
-              id="image"
-              accept=".jpg,.png, .jpeg"
-              onChange={(e) => {
-                setImageFile(e.target.files[0]); // Set the selected file
-              }}
-            />
-            
-            {error && <p className="text-danger">{error}</p>}
-            <div className="d-grid gap-2">
-              <button type="submit" className="btn btn-primary">
-                Add
-              </button>
+            <div className="mb-3">
+              <label htmlFor="image" className="form-label">Choose an image</label>
+              <input
+                type="file"
+                className="form-control-file"
+                id="image"
+                accept=".jpg,.png,.jpeg"
+                onChange={(e) => {
+                  setImageFile(e.target.files[0]); // Set the selected file
+                }}
+              />
             </div>
 
+            {error && <p className="text-danger text-center">{error}</p>}
+            <div className="d-grid gap-2">
+              <button type="submit" className="btn btn-primary">Add</button>
+            </div>
           </form>
           <ToastContainer />
-
         </div>
       </div>
-      <div className="d-grid gap-2"></div>
     </div>
   );
 };
+
 
 export default AddProduct;

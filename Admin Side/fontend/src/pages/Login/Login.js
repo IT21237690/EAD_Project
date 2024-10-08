@@ -4,7 +4,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
+// Login  page for the web app
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +22,6 @@ const Login = () => {
         password,
       });
 
-      // Access the token using "Token" as per your response format
       const token = response.data.Token;
 
       if (token) {
@@ -33,7 +32,7 @@ const Login = () => {
         const role = decodedToken.role;
 
         if (role === "admin") {
-          navigate("/"); // Redirect to the dashboard or main page
+          navigate("/"); // Redirect to the dashboard or main page if needed
         } else {
           setError("You are not authorized to access this page.");
         }
@@ -50,7 +49,9 @@ const Login = () => {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
+    <div className="container d-flex justify-content-center align-items-center vh-100 "
+    // style={{ backgroundColor: "rgba(128, 128, 128, 0.5)" }}
+    >
       <div className="col-md-4">
         <div className="card p-4 shadow-sm">
           <h3 className="text-center mb-4">Login</h3>
