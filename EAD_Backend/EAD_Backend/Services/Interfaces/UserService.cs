@@ -1,4 +1,10 @@
-﻿using EAD_Backend.Models;
+﻿/*
+ * File name : UserService.cs
+ * Author - Tissera H.M.V.
+ * Discription - User Service Class
+*/
+
+using EAD_Backend.Models;
 
 namespace EAD_Backend.Services.Interfaces;
 

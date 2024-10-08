@@ -1,4 +1,11 @@
-﻿using Microsoft.Extensions.Options;
+﻿/*
+ * File name : UserService.cs
+ * Author - Tissera H.M.V.
+ * Discription - User Service Class
+*/
+
+
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using BCrypt.Net;
 using EAD_Backend.Models;

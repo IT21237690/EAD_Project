@@ -1,4 +1,10 @@
-﻿namespace EAD_Backend.Models.DatabaseSettings;
+﻿/*
+ * File name : UserDatabaseSettings.cs
+ * Author - Tissera H.M.V.
+ * Discription - User Database Settings
+*/
+
+namespace EAD_Backend.Models.DatabaseSettings;
 
 public class UsersDatabaseSettings
 {

@@ -1,4 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*
+ * File name : UserController.cs
+ * Author - Tissera H.M.V.
+ * Discription - User Controller class
+*/
+
+
+using Microsoft.AspNetCore.Mvc;
 using EAD_Backend.Models;
 using EAD_Backend.Services;
 using EAD_Backend.Services.Interfaces;

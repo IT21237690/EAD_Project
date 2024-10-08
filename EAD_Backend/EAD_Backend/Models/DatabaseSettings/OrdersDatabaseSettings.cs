@@ -1,4 +1,11 @@
-﻿namespace EAD_Backend.Models.DatabaseSettings
+﻿
+/*
+ * File name : OrdersDatabaseSettings.cs
+ * Author - Tissera H.M.V.
+ * Discription - Order Database Settings
+*/
+
+namespace EAD_Backend.Models.DatabaseSettings
 {
     public class OrdersDatabaseSettings
     {

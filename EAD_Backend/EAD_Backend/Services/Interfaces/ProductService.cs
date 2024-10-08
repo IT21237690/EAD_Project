@@ -1,4 +1,10 @@
-﻿using EAD_Backend.Models;
+﻿/*
+ * File name : ProductService.cs
+ * Author - Tissera H.M.V.
+ * Discription - Product Service Class
+*/
+
+using EAD_Backend.Models;
 
 namespace EAD_Backend.Services.Interfaces;
 

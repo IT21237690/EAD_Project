@@ -1,4 +1,11 @@
-﻿using MongoDB.Bson;
+﻿/*
+ * File name : Product.cs
+ * Author - Tissera H.M.V.
+ * Discription - Products Model
+*/
+
+
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
@@ -9,6 +16,7 @@ namespace EAD_Backend.Models
     public class Product
     {
         [BsonId]
+      // Exclude from API input
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; } // MongoDB ObjectId as string
 

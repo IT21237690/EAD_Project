@@ -1,3 +1,10 @@
+/*
+ * File name : Program.cs
+ * Author - Tissera H.M.V.
+ * Discription - Main file
+*/
+
+
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using EAD_Backend.Controllers;

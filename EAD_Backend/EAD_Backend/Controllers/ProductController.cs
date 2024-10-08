@@ -1,4 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*
+ * File name : ProductController.cs
+ * Author - Tissera H.M.V.
+ * Discription - Product Controller class
+*/
+
+
+
+using Microsoft.AspNetCore.Mvc;
 using EAD_Backend.Models;
 using EAD_Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -39,7 +47,7 @@ namespace EAD_Backend.Controllers
 
         // Create new product
         [HttpPost("add")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "vendor")]
         public async Task<IActionResult> AddProduct([FromForm] ProductDto productDto)
         {
             if (productDto == null || productDto.Image == null)
@@ -54,6 +62,7 @@ namespace EAD_Backend.Controllers
         }
 
         // Update product by id
+        [Authorize(Roles = "vendor")]
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateProduct(string id, [FromForm] ProductDto productDto)
         {
@@ -70,6 +79,7 @@ namespace EAD_Backend.Controllers
         }
 
         // Delete product by id
+        [Authorize(Roles = "vendor")]
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -85,6 +95,5 @@ namespace EAD_Backend.Controllers
             return NoContent();
         }
 
-        // Optional: Additional methods for image upload can go here
     }
 }

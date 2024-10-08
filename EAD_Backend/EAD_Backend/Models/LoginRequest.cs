@@ -1,4 +1,10 @@
-﻿namespace EAD_Backend.Models
+﻿/*
+ * File name : LoginRequest.cs
+ * Author - Tissera H.M.V.
+ * Discription - Login Model
+*/
+
+namespace EAD_Backend.Models
 {
     public class LoginRequest
     {

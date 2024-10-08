@@ -1,4 +1,10 @@
-﻿using MongoDB.Bson;
+﻿/*
+ * File name : User.cs
+ * Author - Tissera H.M.V.
+ * Discription - User Model
+*/
+
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
@@ -9,13 +15,13 @@ namespace EAD_Backend.Models
     public class User
     {
         [BsonId]
-        [JsonIgnore] // Exclude from API input
+        [JsonIgnore]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } // MongoDB ObjectId as string
+        public string Id { get; set; }
 
         [BsonElement("email")]
         [Required(ErrorMessage = "Email is required")]
-        public string Email { get; set; } // Email as a separate property
+        public string Email { get; set; }
 
         public string Password { get; set; }
 
