@@ -23,7 +23,7 @@ class SignUp : AppCompatActivity() {
         val passwordEditText: EditText = findViewById(R.id.editTextTextPassword)
         val usernameEditText: EditText = findViewById(R.id.editTextText)
         val addressEditText: EditText = findViewById(R.id.editTextTextPostalAddress)
-        val signUpButton: Button = findViewById(R.id.SignUpButtonSignUp)
+        val signUpButton: Button = findViewById(R.id.LoginButtonLogIn)
 
         signUpButton.setOnClickListener{
             val email = emailEditText.text.toString()

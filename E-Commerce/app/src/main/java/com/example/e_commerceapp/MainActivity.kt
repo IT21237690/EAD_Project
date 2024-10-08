@@ -1,5 +1,6 @@
 package com.example.e_commerceapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import android.widget.Button
@@ -17,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.e_commerceapp.ui.theme.ECommerceAppTheme
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,6 +27,12 @@ class MainActivity : ComponentActivity() {
         buttonNavigate.setOnClickListener {
             val intent = Intent(this, SignUp::class.java)
             startActivity(intent)
+        }
+
+        val loginNavigate: Button = findViewById(R.id.LogInButtonWelcomePage)
+        loginNavigate.setOnClickListener{
+            val LoginIntent = Intent(this, LogIn::class.java)
+            startActivity(LoginIntent)
         }
     }
 }

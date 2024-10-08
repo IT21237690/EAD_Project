@@ -97,7 +97,7 @@
             android:textColorHint="#2A2A2A" />
 
         <Button
-            android:id="@+id/SignUpButtonSignUp"
+            android:id="@+id/LoginButtonLogIn"
             style="@android:style/Widget.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/btn_orange"
-            android:text="@string/signup"
+            android:text="Login"
             android:textColor="#ffffff"
             android:textSize="24sp"
             android:textStyle="bold" />

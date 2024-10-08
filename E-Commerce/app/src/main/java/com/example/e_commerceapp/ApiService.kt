@@ -13,12 +13,26 @@ data class SignUpRequest(
     val Address: String
 )
 
-interface ApiService {
-    @POST("User/add")
-    fun signUp(@Body SignUpRequest: SignUpRequest): Call<SignUpResponse>
-}
-
 data class SignUpResponse(
     val message: String, // Change this based on your actual response structure
     val success: Boolean // Add fields according to your API response
 )
+
+data class loginRequest(
+    val email: String,
+    val password: String
+)
+
+data class LoginResponse(
+    val Token: String,   // Token received after login
+    val success: Boolean // Change this based on your actual response structure
+)
+
+interface ApiService {
+    @POST("User/add")
+    fun signUp(@Body SignUpRequest: SignUpRequest): Call<SignUpResponse>
+
+    @POST("User/login")
+    fun login(@Body loginRequest: loginRequest): Call<LoginResponse>
+}
+
