@@ -51,7 +51,7 @@ namespace EAD_Backend.Controllers
 
         // Create new product
         [HttpPost("add")]
-        [Authorize(Roles = "vendor")]
+        [Authorize(Roles = "vendor,admin")]
         public async Task<IActionResult> AddProduct([FromForm] ProductDto productDto)
         {
             if (productDto == null || productDto.Image == null)
@@ -66,7 +66,7 @@ namespace EAD_Backend.Controllers
         }
 
         // Update product by id
-        [Authorize(Roles = "vendor")]
+        [Authorize(Roles = "vendor,admin")]
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateProduct(string id, [FromForm] ProductDto productDto)
         {
@@ -83,7 +83,7 @@ namespace EAD_Backend.Controllers
         }
 
         // Delete product by id
-        [Authorize(Roles = "vendor")]
+        [Authorize(Roles = "vendor,admin")]
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
