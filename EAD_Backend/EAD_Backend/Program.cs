@@ -66,6 +66,8 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddSingleton<IUserService, UsersService>();
 builder.Services.AddSingleton<IOrderService, OrderService>();
 builder.Services.AddSingleton<IProductService, ProductService>();
+builder.Services.AddSingleton<ICartService, CartService>();
+
 
 builder.Services.Configure<UsersDatabaseSettings>(
     builder.Configuration.GetSection("UsersDb"));
@@ -73,6 +75,8 @@ builder.Services.Configure<ProductsDatabaseSettings>(
     builder.Configuration.GetSection("ProductsDb"));
 builder.Services.Configure<OrdersDatabaseSettings>(
     builder.Configuration.GetSection("OrdersDb"));
+builder.Services.Configure<CartDatabaseSettings>(
+    builder.Configuration.GetSection("CartDb"));
 
 // Configure controllers and JSON options
 builder.Services.AddControllers(options =>

@@ -12,6 +12,8 @@ using EAD_Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
 using System.Threading.Tasks;
+using EAD_Backend.Services;
+using System.Security.Claims;
 
 namespace EAD_Backend.Controllers
 {
@@ -20,10 +22,12 @@ namespace EAD_Backend.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly ICartService _cartService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, ICartService cartService)
         {
             _productService = productService;
+            _cartService = cartService;
         }
 
         // Get all products
@@ -93,6 +97,54 @@ namespace EAD_Backend.Controllers
             await _productService.Remove(product.Id);
 
             return NoContent();
+        }
+
+        // Add to Cart API
+        [HttpPost("add-to-cart/{productId}")]
+        [Authorize]
+        public async Task<IActionResult> AddToCart(string productId)
+        {
+            // Extract customer email from JWT token
+            var customerEmail = User.FindFirst(ClaimTypes.Email);
+            var email = customerEmail?.Value;
+
+            if (string.IsNullOrEmpty(email))
+            {
+                return Unauthorized("Customer email not found in token.");
+            }
+
+            try
+            {
+                await _cartService.AddToCart(productId, email);
+                return Ok("Product added to cart successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("cart")]
+        public async Task<IActionResult> GetCartByCustomer()
+        {
+            // Extract the customer email from the JWT token's claims
+            var customerEmail = User.FindFirst(ClaimTypes.Email);
+            var email = customerEmail?.Value;
+
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Customer email not found in token.");
+            }
+
+            try
+            {
+                var cartItems = await _cartService.GetCartByCustomer(email);
+                return Ok(cartItems); // Return the list of cart items
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
     }
