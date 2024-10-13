@@ -75,7 +75,7 @@ function DisplayProducts() {
   );
 
   return (
-    <div>
+    <div style={{ backgroundColor: "white", minHeight: "100vh", padding: "20px" }}>
       <h1 className="text-center my-4">Product Dashboard</h1>
       <div className="container">
         <div className="input-group mb-4">
@@ -99,13 +99,14 @@ function DisplayProducts() {
             Add Product
           </Link>
         </div>
-
+  
         <div className="table-responsive">
-          <table className="table table-striped table-hover table-bordered">
-            <thead className="table-primary">
+        <table className="table table-bordered" style={{ backgroundColor: "white" }}>
+          <thead className="table-primary" style={{ backgroundColor: "white", color: "black" }}>
               <tr>
                 <th scope="col">Product Name</th>
                 <th scope="col">Product Description</th>
+                <th scope="col">Product Category</th>
                 <th scope="col">Image</th>
                 <th scope="col">Product Price</th>
                 <th scope="col">Actions</th>
@@ -116,6 +117,7 @@ function DisplayProducts() {
                 <tr key={product.Id}>
                   <td>{product.ProductName}</td>
                   <td>{product.Description}</td>
+                  <td>{product.Category}</td>
                   <td style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                     <img 
                       src={`data:image/jpeg;base64,${product.ImageBase64}`} 
@@ -124,17 +126,14 @@ function DisplayProducts() {
                     />
                   </td>
                   <td>{product.Price}</td>
-                  <td className="d-flex justify-content-around">
+                  <td className="d-flex justify-content-center align-items-center">
                     <Link to={`/updateproduct/${product.Id}`}>
-                      <button
-                        className="btn btn-sm btn-warning"
-                        id="EditButton"
-                      >
+                      <button className="btn btn-sm btn-warning" id="EditButton">
                         Edit
                       </button>
                     </Link>
                     <button
-                      className="btn btn-sm btn-danger"
+                      className="btn btn-sm btn-danger ms-2"
                       onClick={() => handleDelete(product.Id)}
                     >
                       Delete
@@ -148,6 +147,9 @@ function DisplayProducts() {
       </div>
     </div>
   );
-}
-
-export default DisplayProducts;
+  
+  }
+  
+  export default DisplayProducts;
+  
+  

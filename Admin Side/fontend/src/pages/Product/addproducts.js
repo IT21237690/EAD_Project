@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 const AddProduct = () => {
   const [productname, setProductName] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [error, setError] = useState("");
   const [imageFile, setImageFile] = useState(null);
@@ -29,6 +30,7 @@ const AddProduct = () => {
       formData.append("Name", productname);
       formData.append("Price", price);
       formData.append("Description", description);
+      formData.append("Category", category);
       formData.append("Image", imageFile);
 
       // Make the API request
@@ -97,6 +99,20 @@ const AddProduct = () => {
                 placeholder="Enter Product Description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="category" className="form-label">
+                Product Category
+              </label>
+              <input
+                type="text"
+                id="category"
+                className="form-control"
+                placeholder="Enter Product Category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
                 required
               />
             </div>

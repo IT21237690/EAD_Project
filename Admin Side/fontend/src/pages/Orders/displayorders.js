@@ -95,7 +95,7 @@ function DisplayOrders() {
   );
 
   return (
-    <div>
+    <div style={{ backgroundColor: "white", minHeight: "100vh", padding: "20px" }}>
       <h1 className="text-center my-4">Orders Dashboard</h1>
       <div className="container">
         <div className="input-group mb-4">
@@ -114,8 +114,8 @@ function DisplayOrders() {
         </div>
 
         <div className="table-responsive">
-          <table className="table table-striped table-hover table-bordered">
-            <thead className="table-primary">
+        <table className="table table-bordered" style={{ backgroundColor: "white" }}>
+          <thead className="table-primary" style={{ backgroundColor: "white", color: "black" }}>
               <tr>
                 <th scope="col">Order ID</th>
                 <th scope="col">Customer Email</th>

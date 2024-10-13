@@ -45,7 +45,7 @@ function Display() {
   );
 
   return (
-    <div>
+    <div style={{ backgroundColor: "white", minHeight: "100vh", padding: "20px" }}>
       <h1 className="text-center my-4">Users Dashboard</h1>
       <div className="container">
         <div className="input-group mb-4">
@@ -68,47 +68,47 @@ function Display() {
 
       {/* Table */}
       <div className="table-responsive">
-          <table className="table table-striped table-hover table-bordered">
-            <thead className="table-primary">
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Address</th>
-            <th scope="col">Email</th>
-            <th scope="col">Role</th>
-            <th scope="col">Created Date</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.map((user) => (
-            <tr key={user.Email}>
-              <td>{user.Name}</td>
-              <td>{user.Address}</td>
-              <td>{user.Email}</td>
-              <td>{user.Role}</td>
-              <td>{new Date(user.CreatedDate).toLocaleDateString()}</td>
-              <td className="d-flex justify-content-around">
-                {/* Edit button */}
-                <Link to={`/update/${user.Email}`}>
-                <button
-                      className="btn btn-sm btn-warning" id="EditButton">
-                    Edit
-                  </button>
-                </Link>
-
-                {/* Delete button */}
-                <button
-                  className="btn btn-sm btn-danger"
-                  id="DeleteButton"
-                  onClick={() => handleDelete(user.Email)}
-                >
-                  Delete
-                </button>
-              </td>
+        <table className="table table-hover table-bordered" style={{ backgroundColor: "white" }}>
+          <thead className="table-primary" style={{ backgroundColor: "white", color: "black" }}>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Address</th>
+              <th scope="col">Email</th>
+              <th scope="col">Role</th>
+              <th scope="col">Created Date</th>
+              <th scope="col">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody style={{ backgroundColor: "white", color: "black" }}>
+            {filteredData.map((user) => (
+              <tr key={user.Email}>
+                <td>{user.Name}</td>
+                <td>{user.Address}</td>
+                <td>{user.Email}</td>
+                <td>{user.Role}</td>
+                <td>{new Date(user.CreatedDate).toLocaleDateString()}</td>
+                <td className="d-flex justify-content-around">
+                  {/* Edit button */}
+                  <Link to={`/update/${user.Email}`}>
+                    <button className="btn btn-sm btn-warning" id="EditButton">
+                      Edit
+                    </button>
+                  </Link>
+
+                  {/* Delete button */}
+                  <button
+                    className="btn btn-sm btn-danger"
+                    id="DeleteButton"
+                    onClick={() => handleDelete(user.Email)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
     </div>
     </div>
     </div>

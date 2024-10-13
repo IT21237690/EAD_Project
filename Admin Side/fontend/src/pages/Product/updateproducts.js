@@ -8,6 +8,7 @@ function UpdateProduct() {
   const { id } = useParams();
   const [productname, setProductName] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
   const [existingImage, setExistingImage] = useState("");
@@ -21,6 +22,7 @@ function UpdateProduct() {
         const product = res.data;
         setProductName(product.ProductName);
         setDescription(product.Description);
+        setCategory(product.Category);
         setPrice(product.Price);
         setExistingImage(product.ImageBase64); // Set existing image URL
 
@@ -38,6 +40,7 @@ function UpdateProduct() {
     formData.append("Name", productname);
     formData.append("Price", price);
     formData.append("Description", description);
+    formData.append("Category", category);
     if (image) {
       // Append the new image if it exists
       formData.append("Image", image);
@@ -95,7 +98,19 @@ function UpdateProduct() {
               required
             />
           </div>
-
+          <div className="form-group">
+            <label htmlFor="category" className="mt-2">
+              Product Category
+            </label>
+            <input
+              type="text"
+              placeholder="Enter category"
+              className="form-control"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+            />
+          </div>
           <div className="form-group">
             <label htmlFor="price" className="mt-2">
               Product Price
