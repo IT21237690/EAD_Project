@@ -27,6 +27,8 @@ namespace EAD_Backend.Models
 
         public string Description { get; set; }
 
+        public string Category { get; set; }
+
         public string? ImageBase64 { get; set; } // Nullable to make it optional
 
         [JsonIgnore]
@@ -42,6 +44,7 @@ namespace EAD_Backend.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Category { get; set; }
         public IFormFile Image { get; set; } // Image file
         public double Price { get; set; }
     }

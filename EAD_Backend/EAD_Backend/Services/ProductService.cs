@@ -56,6 +56,7 @@ namespace EAD_Backend.Services
             {
                 ProductName = newProductDto.Name,
                 Description = newProductDto.Description,
+                Category = newProductDto.Category,
                 ImageBase64 = base64Image,
                 Price = newProductDto.Price,
                 Sold = false,
@@ -75,6 +76,7 @@ namespace EAD_Backend.Services
             existingProduct.ProductName = updateProductDto.Name;
             existingProduct.Price = updateProductDto.Price;
             existingProduct.Description = updateProductDto.Description;
+            existingProduct.Category = updateProductDto.Category;
 
             // Update image if provided
             if (updateProductDto.Image != null)
