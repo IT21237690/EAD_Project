@@ -1,5 +1,5 @@
 <resources>
-<!--    <string name="app_name">E-Commerce App</string>-->
+    <!--    <string name="app_name">E-Commerce App</string>-->
     <string name="loadingimage">loadingimage</string>
     <string name="welcome">Welcome</string>
     <string name="login">Login</string>
@@ -21,7 +21,7 @@
     <string name="add_to_cart">Add to Cart</string>
     <string name="buy_now">Buy Now</string>
     <string name="home">Home</string>
-<!--    <string name="categories">Categories</string>-->
+    <!--    <string name="categories">Categories</string>-->
     <string name="cart">Cart</string>
     <string name="profile">Profile</string>
 </resources>

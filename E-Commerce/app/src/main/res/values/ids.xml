@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="imageViewExplorer" type="id" />
+    <item name="textViewExplorer" type="id" />
+    <item name="imageViewWishList" type="id" />
+    <item name="textViewWishList" type="id" />
+    <item name="imageViewInvisi" type="id" />
+    <item name="textViewInvisi" type="id" />
+    <item name="imageViewCart2" type="id" />
+    <item name="textViewCart2" type="id" />
+    <item name="imageViewProfile" type="id" />
+    <item name="textViewProfile" type="id" />
+</resources>

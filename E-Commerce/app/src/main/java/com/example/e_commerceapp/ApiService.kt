@@ -4,6 +4,8 @@ import android.provider.ContactsContract.CommonDataKinds.Email
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.GET
+import retrofit2.http.Path
 
 data class SignUpRequest(
     val email: String,
@@ -34,5 +36,11 @@ interface ApiService {
 
     @POST("User/login")
     fun login(@Body loginRequest: loginRequest): Call<LoginResponse>
+
+    @GET("Product/all")  // Adjust the endpoint based on your API
+    fun getProducts(): Call<List<Product>>
+
+    @GET("Product/id/{id}")
+    fun getProductById(@Path("id") id: String): Call<Product>
 }
 
