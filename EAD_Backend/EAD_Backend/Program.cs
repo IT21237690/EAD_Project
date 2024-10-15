@@ -67,6 +67,7 @@ builder.Services.AddSingleton<IUserService, UsersService>();
 builder.Services.AddSingleton<IOrderService, OrderService>();
 builder.Services.AddSingleton<IProductService, ProductService>();
 builder.Services.AddSingleton<ICartService, CartService>();
+builder.Services.AddSingleton<IVendorService, VendorService>();
 
 
 builder.Services.Configure<UsersDatabaseSettings>(
@@ -77,6 +78,8 @@ builder.Services.Configure<OrdersDatabaseSettings>(
     builder.Configuration.GetSection("OrdersDb"));
 builder.Services.Configure<CartDatabaseSettings>(
     builder.Configuration.GetSection("CartDb"));
+builder.Services.Configure<VendorDatabaseSettings>(
+    builder.Configuration.GetSection("VendorDb"));
 
 // Configure controllers and JSON options
 builder.Services.AddControllers(options =>
