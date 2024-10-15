@@ -32,7 +32,7 @@ const Login = () => {
         const decodedToken = jwtDecode(token);
         const role = decodedToken.role;
 
-        if (role === "admin") {
+        if (role === "admin" || role === "vendor") {
           navigate("/"); // Redirect to the dashboard or main page if needed
         } else {
           setError("You are not authorized to access this page.");
