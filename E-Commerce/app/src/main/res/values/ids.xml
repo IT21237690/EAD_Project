@@ -10,4 +10,5 @@
     <item name="textViewCart2" type="id" />
     <item name="imageViewProfile" type="id" />
     <item name="textViewProfile" type="id" />
+    <item name="backImageView" type="id" />
 </resources>

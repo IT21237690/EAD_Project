@@ -56,7 +56,9 @@ class LogIn : AppCompatActivity() {
                         Toast.makeText(this@LogIn, "Login successful!", Toast.LENGTH_SHORT).show()
 
                         // Navigate to HomePage
-                        startActivity(Intent(this@LogIn, HomePage::class.java))
+                        val intent = Intent(this@LogIn, HomePage::class.java)
+                        intent.putExtra("user_email", email)  // Pass the user's email
+                        startActivity(intent)
                         finish()
                     } else {
                         // Log the error if token is null

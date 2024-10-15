@@ -42,5 +42,8 @@ interface ApiService {
 
     @GET("Product/id/{id}")
     fun getProductById(@Path("id") id: String): Call<Product>
+
+    @GET("User/email/{email}")
+    fun getUserByEmail(@Path("email") email: String): Call<User>
 }
 
