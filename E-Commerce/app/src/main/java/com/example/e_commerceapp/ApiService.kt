@@ -66,5 +66,16 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body request: PlaceOrderRequest
     ): Call<Void>
+
+    @GET("api/Order/customerOrders")
+    fun getCustomerOrdersWithToken(
+        @Header("Authorization") token: String
+    ): Call<List<CustomerOrder>>
+
+    @POST("api/Vendor/rate")
+    fun rateVendor(
+        @Header("Authorization") token: String, // Pass the token in the header
+        @Body ratingRequest: VendorRatingRequest // Pass the rating data in the body
+    ): Call<Void>
 }
 
