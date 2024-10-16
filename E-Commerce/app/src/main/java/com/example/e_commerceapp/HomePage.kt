@@ -3,6 +3,7 @@ package com.example.e_commerceapp
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,10 +22,29 @@ class HomePage : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var productAdapter: ProductAdapter
     private val productList = mutableListOf<Product>()
+    private lateinit var textViewForAllProducts: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
+
+        // Category buttons
+        val electronicsImageView: ImageView = findViewById(R.id.imageViewElectronics)
+        val homeImageView: ImageView = findViewById(R.id.imageViewHome)
+        val fashionImageView: ImageView = findViewById(R.id.imageViewFashion)
+
+        // Set up click listeners
+        electronicsImageView.setOnClickListener {
+            navigateToViewAllProducts("Electronics")
+        }
+
+        homeImageView.setOnClickListener {
+            navigateToViewAllProducts("Home & Living")
+        }
+
+        fashionImageView.setOnClickListener {
+            navigateToViewAllProducts("Fashion")
+        }
 
         // Retrieve the email passed from Login.kt
         val userEmail = intent.getStringExtra("user_email")
@@ -33,6 +53,12 @@ class HomePage : AppCompatActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         fetchProducts()
+
+        textViewForAllProducts = findViewById(R.id.seeAllProducts)
+        textViewForAllProducts.setOnClickListener {
+            val intent = Intent(this, ViewAndSearchAll::class.java)
+            startActivity(intent)
+        }
 
         // Handle ImageView click for navigating to UserProfile
         val userIcon: ImageView = findViewById(R.id.UserIcon)
@@ -49,6 +75,13 @@ class HomePage : AppCompatActivity() {
 
 
 
+    }
+
+    // Function to navigate to the ViewAllProducts activity
+    private fun navigateToViewAllProducts(category: String) {
+        val intent = Intent(this, ViewAllProducts::class.java)
+        intent.putExtra("CATEGORY", category)  // Pass the selected category
+        startActivity(intent)
     }
 
     private fun fetchProducts() {

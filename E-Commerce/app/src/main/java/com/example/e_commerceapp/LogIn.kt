@@ -53,6 +53,11 @@ class LogIn : AppCompatActivity() {
                         // Save the token in SharedPreferences
                         saveToken(loginResponse.Token)
 
+                        val sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putString("token", loginResponse.Token)
+                        editor.apply()
+
                         Toast.makeText(this@LogIn, "Login successful!", Toast.LENGTH_SHORT).show()
 
                         // Navigate to HomePage

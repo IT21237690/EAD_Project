@@ -1,5 +1,6 @@
 package com.example.e_commerceapp
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,7 +11,12 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.util.Base64
 import android.graphics.BitmapFactory
+import android.widget.Button
 import android.widget.Toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ViewProduct : AppCompatActivity() {
 
@@ -18,6 +24,11 @@ class ViewProduct : AppCompatActivity() {
     private lateinit var itemNameTextView: TextView
     private lateinit var itemPriceTextView: TextView
     private lateinit var itemDescriptionTextView: TextView
+    private lateinit var addToCart: ImageView
+    private lateinit var quantityTextView: TextView
+    private lateinit var increaseQuantityIcon: ImageView
+    private lateinit var purchaseButton: Button
+    private var quantity = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,14 +38,37 @@ class ViewProduct : AppCompatActivity() {
         itemNameTextView = findViewById(R.id.ItemName)
         itemPriceTextView = findViewById(R.id.ItemPrice)
         itemDescriptionTextView = findViewById(R.id.ItemDescription)
+        addToCart = findViewById(R.id.addToCartButton)
+        quantityTextView = findViewById(R.id.quantityTextView)
+        increaseQuantityIcon = findViewById(R.id.increaseQuantityIcon)
+        purchaseButton = findViewById(R.id.Purchasebutton)
+
+        quantityTextView.text = quantity.toString()
+
+        increaseQuantityIcon.setOnClickListener {
+            quantity++
+            quantityTextView.text = quantity.toString()
+        }
 
         val productId = intent.getStringExtra("PRODUCT_ID")
         Log.d("ViewProduct", "Received product ID: $productId")
+
+        // Add product to cart
+        addToCart.setOnClickListener {
+            if (productId != null) {
+                addToCart(productId)
+            }
+        }
+
+        // Place order
+        purchaseButton.setOnClickListener {
+            if (productId != null) {
+                placeOrder(productId, quantity)
+            }
+        }
+
         if (productId != null) {
-            fetchProductDetails(productId) // Modify this method to accept String
-        } else {
-            Toast.makeText(this, "Invalid product ID", Toast.LENGTH_SHORT).show()
-            Log.e("ViewProduct", "Invalid product ID received")
+            fetchProductDetails(productId)
         }
     }
 
@@ -70,6 +104,58 @@ class ViewProduct : AppCompatActivity() {
             imageView.setImageBitmap(bitmap)
         } catch (e: Exception) {
             Log.e("ViewProduct", "Error decoding image", e)
+        }
+    }
+
+    private fun addToCart(productId: String) {
+        // Retrieve token from SharedPreferences
+        val sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+        val token = sharedPreferences.getString("token", null)
+
+        if (token != null) {
+            val apiService = RetrofitInstance.api
+            apiService.addToCart(productId, "Bearer $token").enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@ViewProduct, "Product added to cart", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@ViewProduct, "Failed to add product to cart", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.e("ViewProduct", "Error adding product to cart", t)
+                    Toast.makeText(this@ViewProduct, "Network error", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            Toast.makeText(this, "User not authenticated. Please login first.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun placeOrder(productId: String, quantity: Int) {
+        val sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+        val token = sharedPreferences.getString("token", null)
+
+        if (token != null) {
+            val orderRequest = PlaceOrderRequest(productId, quantity)
+            val apiService = RetrofitInstance.api
+            apiService.placeOrder(productId, "Bearer $token", orderRequest).enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@ViewProduct, "Order placed successfully", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@ViewProduct, "Failed to place order", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.e("ViewProduct", "Error placing order", t)
+                    Toast.makeText(this@ViewProduct, "Network error", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            Toast.makeText(this, "User not authenticated. Please login first.", Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -12,7 +12,7 @@ import android.graphics.BitmapFactory
 import android.content.Intent
 import android.util.Log
 
-class ProductAdapter(private val productList: List<Product>) :
+class ProductAdapter(private var productList: List<Product>) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -45,6 +45,11 @@ class ProductAdapter(private val productList: List<Product>) :
             }
             holder.itemView.context.startActivity(intent)
         }
+    }
+
+    fun updateData(newProducts: List<Product>) {
+        this.productList = newProducts
+        notifyDataSetChanged()  // Notify the adapter to refresh the data
     }
 
 
