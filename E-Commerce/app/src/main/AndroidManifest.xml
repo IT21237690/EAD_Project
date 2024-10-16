@@ -20,9 +20,6 @@
             android:name=".EditProfile"
             android:exported="false" />
         <activity
-            android:name=".OrderTracking"
-            android:exported="false" />
-        <activity
             android:name=".UserProfile"
             android:exported="false" />
         <activity

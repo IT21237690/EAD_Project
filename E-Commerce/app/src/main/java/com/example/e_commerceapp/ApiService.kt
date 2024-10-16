@@ -45,5 +45,10 @@ interface ApiService {
 
     @GET("User/email/{email}")
     fun getUserByEmail(@Path("email") email: String): Call<User>
+
+    @GET("api/Order/customerOrders")
+    fun getCustomerOrders(): Call<List<CustomerOrder>>
+
+
 }
 
