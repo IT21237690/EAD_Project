@@ -6,6 +6,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Header
 
 data class SignUpRequest(
     val email: String,
@@ -47,7 +48,9 @@ interface ApiService {
     fun getUserByEmail(@Path("email") email: String): Call<User>
 
     @GET("api/Order/customerOrders")
-    fun getCustomerOrders(): Call<List<CustomerOrder>>
+    fun getCustomerOrdersWithToken(
+        @Header("Authorization") token: String
+    ): Call<List<CustomerOrder>>
 
 
 }
